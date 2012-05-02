@@ -11,7 +11,7 @@ import "splines.py" as spl
 
 
 def f_lambda_e(f, lambda, spl.ey):
-    hmax = max(ey)
+    hmax = max(spl.ey)
     return 3*lambda*hmax + (1-lambda)*f
 
 def f_length_e(f):
