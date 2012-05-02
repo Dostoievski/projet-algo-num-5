@@ -1,6 +1,6 @@
 import numpy as np;
 import re; # regexp
-import matplotlib.pyplot as ma;
+import matplotlib.pyplot as mp;
 
 ################################################################
 # Airfoil : load profile of a wing
@@ -32,4 +32,22 @@ def load_foil(file):
     return(ex,ey,ix,iy)
 
 
+def plot_airfoil(ex, ey, ix, iy, file_name):
+    """ Plots an airfoil (or any pair of curves) """
+    mp.clf()
+    mp.plot(ex, ey, 'r')
+    mp.plot(ix, iy, 'g')
+    mp.savefig(file_name)
+    mp.clf()
+
+
+
+
+
+
+# ------------------- Tests ------------------------ #
+
 (ex,ey,ix,iy) = load_foil("fx63145.dat")
+#plot_airfoil(ex, ey, ix, iy, "airfoil.png")
+
+# -------------------------------------------------- #
