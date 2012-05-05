@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 import numpy as np;
 import re; # regexp
 import matplotlib.pyplot as mp;
@@ -40,14 +42,39 @@ def plot_airfoil(ex, ey, ix, iy, file_name):
     mp.savefig(file_name)
     mp.clf()
 
-
-
-
-
-
 # ------------------- Tests ------------------------ #
 
 (ex,ey,ix,iy) = load_foil("fx63145.dat")
 #plot_airfoil(ex, ey, ix, iy, "airfoil.png")
 
 # -------------------------------------------------- #
+
+
+# -------------------------------------------------- #
+# Cubic Splines :                                    #
+# -------------------------------------------------- #
+
+# A terme sera fait avec un lambda
+def cubic_spline_interpolation(X,Y):
+    """ Returns a f(x) function that interpolates the cloud of points X, Y using cubic Splines """
+
+    # The 4 factors for each interval
+    A = np.zeros(X.size)
+    B = np.zeros(X.size)
+    C = np.zeros(X.size)
+    D = np.zeros(X.size)
+    
+    # The second derivative in each point
+    Ypp = np.zeros(X.size)
+
+    # Building the system to solve to find Ypp
+
+
+    # Solving the system
+
+
+    # Calculating the 4 factors for each interval
+
+
+    # Building the lambda function to return
+        
