@@ -75,10 +75,12 @@ def cubic_spline_interpolation_calc(X,Y,Ypp,x):
         if (X[i] <= x) and (x < X[i+1]):
             # --- The 4 factors  ---
             A = (X[i+1] - x) / (X[i+1] - X[i])
-            B = 1 - A
-            opt_var = (1/6) * (X[i+1] - X[i])**2 # Optimisation légère du calcul
+            B = 1. - A
+            opt_var = (1./6.) * (X[i+1] - X[i])**2 # Optimisation légère du calcul
+            #print "Xs :", X[i], X[i+1]
             C = (A**3 - A) * opt_var
             D = (B**3 - B) * opt_var
+            #print "A : ", A, "\nB :", B, "\nC :", C, "\nD :", D
             return A*Y[i] + B*Y[i+1] + C*Ypp[i] + D*Ypp[i+1]
 
     if x >= X[N-1]:
@@ -100,3 +102,37 @@ def cubic_spline_interpolation(X,Y):
 
 
     
+def cubic_spline_interpolation_derivative_calc(X,Y,Ypp,x):
+    """ Returns the derivative of the cubic spline interpolation of the cloud of point X, Y, knowing its second derivative Ypp """
+
+    N = X.size
+
+    for i in np.arange(0,N-1):
+        if (X[i] <= x) and (x < X[i+1]):
+            # --- The 4 factors  ---
+            A = (X[i+1] - x) / (X[i+1] - X[i])
+            Ap = -1. / (X[i+1] - X[i])
+            B = 1. - A
+            Bp = 1. - Ap
+            opt_var = (1./6.) * (X[i+1] - X[i])**2 # Optimisation légère du calcul
+            C = (3.*Ap*(A**2) - Ap) * opt_var
+            D = (3.*Bp*(B**2) - Bp) * opt_var
+
+            return Ap*Y[i] + Bp*Y[i+1] + C*Ypp[i] + D*Ypp[i+1]
+
+    if x >= X[N-1]:
+        return Y[N-1]
+    else:
+        return Y[0]
+
+
+def cubic_spline_interpolation_derivative(X,Y):
+    """ Returns a f(x) function that is the derivative of the interpolation of the cloud of points X, Y using cubic Splines """
+
+    N = X.size
+    
+    # --- The second derivative in each point ---
+    Ypp = cubic_spline_interpolation_precalc(X,Y)
+
+    # --- Building the lambda function to return ---
+    return lambda x: cubic_spline_interpolation_derivative_calc(X,Y,Ypp,x)
