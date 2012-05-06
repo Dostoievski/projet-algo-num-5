@@ -108,7 +108,7 @@ def cubic_spline_interpolation_derivative_calc(X,Y,Ypp,x):
     N = X.size
 
     for i in np.arange(0,N-1):
-        if (X[i] <= x) and (x < X[i+1]):
+        if (X[i] <= x.all()) and (x.all() < X[i+1]):
             # --- The 4 factors  ---
             A = (X[i+1] - x) / (X[i+1] - X[i])
             Ap = -1. / (X[i+1] - X[i])
@@ -120,7 +120,7 @@ def cubic_spline_interpolation_derivative_calc(X,Y,Ypp,x):
 
             return Ap*Y[i] + Bp*Y[i+1] + C*Ypp[i] + D*Ypp[i+1]
 
-    if x >= X[N-1]:
+    if x.all() >= X[N-1]:
         return Y[N-1]
     else:
         return Y[0]
