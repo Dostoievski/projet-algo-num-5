@@ -83,12 +83,34 @@ n=10.
 x = np.arange(0.0, 1. , (1.-0.)/n)
 y = curve(f, n, x)
 mp.plot(x, y)
-mp.title('Integration comparison')
-mp.savefig("integration.png")
+mp.title('function trace')
+mp.savefig("function.png")
 
 
 def trace_integrals(f, a, b, nmax, l_fcts):
-    n = np.arange(0, nmax, 1)
-    tab =
+    n = np.arange(0., nmax, 1.)
+    m = len(l_fcts)
+    integrals = range(0)
+        
+    for k in np.arange(m):
+        integrals.append(np.arange(0, nmax, 1))
+        for j in np.arange(nmax):
+                integrals[k][j] = l_fcts[k](f, a, b, n[j])
+    mp.clf()
+    for l in range(m):
+        mp.plot(n, integrals[l])
+    mp.title('Integration method trace')
+    mp.savefig("integration.png")
+
+    mp.clf()
+
+
+
     
-    for k in range( len(l_fcts)):
+l_fcts = (rectangle_method_left,
+          rectangle_method_right,
+          rectangle_method_middle,
+          trapez_method,
+          simpson)
+
+trace_integrals(f, 0., 1., 100., l_fcts)
