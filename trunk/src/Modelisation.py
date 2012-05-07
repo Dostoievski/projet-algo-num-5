@@ -2,6 +2,7 @@ import numpy as np
 import scipy.integrate as sp
 import splines as spl
 import pylab as mp
+import integration as it
 
 #--------Five ways to integrate a function--------#
 
