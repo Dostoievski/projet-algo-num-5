@@ -175,7 +175,7 @@ mp.title('function trace')
 mp.savefig("function.png")
 
 
-def trace_integrals(f, a, b, nmax, l_fcts):
+def trace_integrals(f, a, b, nmax, l_fcts, l_labels):
     n = np.arange(0., nmax, 1.)
     m = len(l_fcts)
     integrals = range(0)
@@ -184,9 +184,11 @@ def trace_integrals(f, a, b, nmax, l_fcts):
         integrals.append(np.arange(0, nmax, 1))
         for j in np.arange(nmax):
                 integrals[k][j] = l_fcts[k](f, a, b, n[j])
+                
     mp.clf()
     for l in range(m):
-        mp.plot(n, integrals[l])
+        mp.plot(n, integrals[l], label=l_labels[l])
+    mp.legend(loc='best')
     mp.title('Integration method trace')
     mp.savefig("integration.png")
 
@@ -205,10 +207,12 @@ def trace_errors(f, a, b, nmax, l_fcts, l_labels, real_value):
     mp.clf()
     for l in range(m):
         mp.plot(n, errors[l], label=l_labels[l])
-    mp.legend(loc='lower left')
+    
+    mp.legend(loc='best')
     mp.title('Error depending on integration methods')
     mp.savefig("errors_integration.png")
 
+    mp.legend(loc='lower left')
     mp.xscale('log')
     mp.yscale('log')
     mp.savefig("log_errors_integration.png")
@@ -232,5 +236,5 @@ l_labels = ("rectangle_method_left",
 
 
 n = 300.
-trace_integrals(f, 0., 1., 100., l_fcts)
+trace_integrals(f, 0., 1., 100., l_fcts, l_labels)
 trace_errors(f, a, b, n, l_fcts, l_labels, real_value)
