@@ -91,6 +91,42 @@ def airflow_model(f_int, f_ext):
     mp.savefig("test.png")
     mp.clf()
 
+def pressure_to_colour(P, Pmax):#Piti pb de couleur
+    return P/Pmax * 255
+    
+
+def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_method, Ps, precision, n):
+    t = np.arange(0.0, 1.0, 0.01)
+    lambdaTab = np.arange(0.0,1.0,0.1)  
+    nbLambda = len(lambdaTab)
+    Pressure_Tab = np.zeros(nbLambda)
+    Color_Tab = np.zeros(nbLambda)
+    Pmax = 2
+    
+    
+    for i in range(nbLambda):
+        f_lambda_int = f_lambda(f_int, lambdaTab[i], max(iy))
+        f_lambda_int_d = f_lambda_d(f_int_d, lambdaTab[i])
+        length_int = length_of_curve(f_lambda_int_d, integration_method, min(ix), max(ix), n)
+        Pressure_Tab[i] = pressure_on_curve(Ps, length_int)
+        Color_Tab[i] = pressure_to_colour(Pressure_Tab[i], Pmax)
+        f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
+        mp.plot(t,f_lambda_values_int,linewidth=5.0, color=Color_Tab[i])
+        
+    for j in range(nbLambda):
+        f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
+        f_lambda_ext_d = f_lambda_d(f_ext_d, lambdaTab[j])
+        length_ext = length_of_curve(f_lambda_ext_d, integration_method, min(ex), max(ex), n)
+        Pressure_Tab[j] = pressure_on_curve(Ps, length_ext)
+        Color_Tab[j] = pressure_to_colour(Pressure_Tab[j], Pmax)
+        f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
+        mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=Color_Tab[j])
+
+    mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
+    mp.title('map pressure of the fx63145')
+    mp.savefig("map_pressure_test.png")
+    mp.clf()
+
 
 #def matrix_map_pressure(f_d, Ps, precision):
 #    lambdaTab = np.arange(0.0,1.0,precision)
@@ -164,3 +200,5 @@ print pressure_on_curve(1, length_ext_b)
     
 #M = matrix_map_pressure(ext_interp_fun_d, 1, 1, 0.1)
 #print matrix_to_png(M, "Map_pressure.png")
+
+print curves_pressure_representation(int_interp_fun, int_interp_fun_d, ext_interp_fun, ext_interp_fun_d, it.simpson, 1, 0.1, 50)
