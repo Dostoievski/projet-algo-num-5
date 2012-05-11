@@ -162,9 +162,10 @@ eps = 1e-2
 mp.clf()
 
 def curve(f,n,t):
-    curve_values = np.arange(n)
+    curve_values = np.arange(0.,n)
     for i in np.arange(n):
         curve_values[i] = f(t[i])
+        #print "curve :", curve_values[i], "f(t) :", f(t[i])
     return curve_values
 
 n=10.
