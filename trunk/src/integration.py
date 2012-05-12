@@ -12,6 +12,7 @@ import pylab as mp
 
 
 def rectangle_method_left(f, a, b, n):
+    """returns the integral values of f between a and b with n iteration using the left rectangle method"""
     h = (b - a)/n
     add = 0
     for k in np.arange(0,n):
@@ -22,6 +23,7 @@ def rectangle_method_left(f, a, b, n):
 
     
 def rectangle_method_right(f, a, b, n):
+    """returns the integral values of f between a and b with n iteration using the right rectangle method"""
     h = (b - a)/n
     add = 0
     for k in np.arange(1,n+1):
@@ -31,6 +33,7 @@ def rectangle_method_right(f, a, b, n):
 
 
 def rectangle_method_middle(f, a, b, n):
+    """returns the integral values of f between a and b with n iteration using the middle rectangle method"""
     h = (b - a)/n
     add = 0
     for k in np.arange(0,n):
@@ -40,6 +43,7 @@ def rectangle_method_middle(f, a, b, n):
 
 
 def trapez_method(f, a, b, n):
+    """returns the integral values of f between a and b with n iteration using the trapez method"""
     h = (b - a)/n
     add = 0
     for k in np.arange(1,n):
@@ -49,6 +53,7 @@ def trapez_method(f, a, b, n):
     return add
 
 def simpson(f, a, b, n):
+    """returns the integral values of f between a and b with n iteration using the simpson method"""
     h = (b - a)/n
     add = 0.
     for k in np.arange(1,n+1):
@@ -61,7 +66,7 @@ def simpson(f, a, b, n):
 #------------------------------------------------#
 
 def rectangle_method_left_eps(f, a, b, e):
-    
+    """returns the integral values of f between a and b with e precision using the left rectangle method"""
     n = 1
     h = (b - a)
     I = f(a) * h
@@ -83,6 +88,7 @@ def rectangle_method_left_eps(f, a, b, e):
     return I2n
 
 def rectangle_method_right_eps(f, a, b, e):
+    """returns the integral values of f between a and b with e precision using the right rectangle method"""
     
     n = 1
     h = (b - a)
@@ -105,6 +111,7 @@ def rectangle_method_right_eps(f, a, b, e):
     return I2n
 
 def rectangle_method_middle_eps(f, a, b, e):
+    """returns the integral values of f between a and b with e precision using the middle rectangle method"""
     
     n = 1
     h = (b - a)
@@ -177,6 +184,7 @@ mp.savefig("function.png")
 
 
 def trace_integrals(f, a, b, nmax, l_fcts, l_labels):
+    """Plots a graph comparing the convergence speed of each integral method"""
     n = np.arange(0., nmax, 1.)
     m = len(l_fcts)
     integrals = range(0)
@@ -190,6 +198,8 @@ def trace_integrals(f, a, b, nmax, l_fcts, l_labels):
     for l in range(m):
         mp.plot(n, integrals[l], label=l_labels[l])
     mp.legend(loc='best')
+    mp.xlabel('n')
+    mp.ylabel('integral value')
     mp.title('Integration method trace')
     mp.savefig("integration.png")
 
@@ -197,6 +207,7 @@ def trace_integrals(f, a, b, nmax, l_fcts, l_labels):
 
 
 def trace_errors(f, a, b, nmax, l_fcts, l_labels, real_value):
+    """Plots a graph comparing the evolution of the error of each integral method"""
     n = np.arange(2., nmax, 1.)
     m = len(l_fcts)
     errors = range(0)
@@ -210,9 +221,13 @@ def trace_errors(f, a, b, nmax, l_fcts, l_labels, real_value):
         mp.plot(n, errors[l], label=l_labels[l])
     
     mp.legend(loc='best')
+    mp.xlabel('n')
+    mp.ylabel('error')
     mp.title('Error depending on integration methods')
     mp.savefig("errors_integration.png")
-
+    
+    mp.xlabel('n')
+    mp.ylabel('error')
     mp.legend(loc='lower left')
     mp.xscale('log')
     mp.yscale('log')
