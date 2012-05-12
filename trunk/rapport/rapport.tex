@@ -51,19 +51,52 @@
     \end{tabular}}
     \vskip 4mm ~
 
-    \parbox{\textwidth}{\small \textit{Abstract : this project goal is to implement a basic model to represent the air flow around an airfoil. With that air flow computation it will then be possible to obtain a pressure map abow and below the wing, so as to approximate the wing's lift (it's ability to sustain the plane in the air)\\
+    \parbox{\textwidth}{\small \textit{Abstract : the goal of this project is to implement a basic model to represent the airflow around an airfoil. With that air flow computation, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air)\\
             This is to be done in two steps :
             \begin{enumerate}
-                \item refine the airfoil into a sufficiently smooth curve
-                \item compute the pressure map using integration method
+                \item refine the airfoil into a sufficiently smooth curve;
+                \item compute the pressure map using integration method.
             \end{enumerate}
         }
     }
 \end{minipage}
 
 \section{Airfoil refinment using cubic splines}
-The only representation of the wing's airfoil we have so far is a .dat file. So we will have to convert this file into python exploitable datas \\
-In order to be able to exploit it using the python programming language, we are going to convert the .dat file information (a cloud point's positions) into a curve using cubic splines.
+The only representation of the wing's airfoil we have so far is a dat file describing a cloud of points. So we will have to convert this file into python exploitable datas.
+
+In order to be able to work with it using the python programming language, we are going to convert the dat file information (a the positions of a cloud of points) into a smooth curve. To get that curve, what we are going to do is to interpolate the curves described by the upper and the lower parts of the airfoil using cubic splines.
+\subsection{How to interpolate a cloud of points with cubic splines}
+To do this interpolation the best way that we could, we used the method and formulas given by the \textit{Numerical Recipes in C}. We assume that we have a cloud of points $(x_i, y_i), i \in [0,N-1]$. There are two main parts of pre-calculus to be able to get the interpolation on a point, given by the formula :
+
+\begin{equation}
+f(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y"_i + D(x)*y"_{i+1}
+\end{equation}
+
+The first is to find the second derivatives of the curve in the points corresponding to $x_i, i \in [0,N-1]$. It can be done by solving a system of equations. Indeed, all the $y_i, i \in [1,N-2]$ are linked by the following equation :
+
+\begin{equation}
+TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+\end{equation}
+
+There are multiple choices for the values of $y_0$ and $y_{N-1}$. We chose to set them to $0$. Then, we solve the system. The whole process is resumed by this algorithm :
+
+\textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
+
+Once we have solved this system, we compute the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$, with the formulas given by the \textit{Numerical Recipes in C}, and we can calculate $f(x)$, the value of the cubic splines interpolation of the cloud of points in $x$.
+
+The result is right, but one problem is remaining : the complexity of evaluating $f(x)$ is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
+
+\subsection{Optimisation}
+Now that we have computed everything to calculate $f(x)$, we notice that without optimisation, the system of equations to find all the second derivatives will be solved at each evaluation of $f(x)$, and lots of time will be lost. To avoid this problem, we chosed to use functionnal programming, as shown in this algorithm :
+
+\textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
+
+The cubic\_splines\_interpolation\_precalc function precomputes the values of the second derivatives, and the function we return only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter : it memorizes the values of the second derivatives.
+
+The final complexity of this process is :  $\mathcal{O}(N^3)$ to get the interpolating function, and  $\mathcal{O}(N)$ to evaluate it (it is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
+
+\subsection{Computing the derivative}
+Why we have done that, how (easy).
 
 
 \section{Computing the length of plane curves : with various integration methods}
