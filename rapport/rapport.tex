@@ -101,14 +101,23 @@ Why we have done that, how (easy).
 
 \section{Computing the length of plane curves : with various integration methods}
 Now that we have a curve representing the airfoil, the next step in our pressure map creation is to find a way to compute the airfoil length.
-To do that we will compute the following formula on our curve. We will use several integration methods, and then comparate the convergence power of each one.
+To do that we will have to compute the following formula on our curve.
+\begin{equation}
+    L([0;T]) = \int_{0}^{T} \sqrt{1 + f'(x)^2}dx
+\end{equation}
+We will use several integration methods, and then compare the convergence power of each one.
+Every single one of the methods listed bellow uses follows the same stages to compute the integral value of a function on a interval and with a given step :
+\begin{itemize}
+    \item compute the value of the integral on the first interval
+    \item increment the interval bounds by the step compute the integral on the new one and add this value to the previous
+    \item stop when the last interval has been calculated
+\end{itemize}
+The only thing that will change is the method used in order to compute the integral value
 
 \subsection{Left rectangle integration method}
-This method use a sum of rectangle surfaces in order to approximate the integral value. each one of the rectangle is build the following way :
 \begin{itemize}
-    \item compute the value of f(x) with x the left bound of the interval
-    \item compute the surface of the rectangle with height the f(x) value and widght the length of the interval
-    \item increment x by the step we choose
+    \item compute the value of $f(x)$ with x the left bound of the interval
+    \item compute the surface of the rectangle with $f(x)$ height and the interval's size width 
 \end{itemize}
 
 \subsection{Right rectangle integration method}
@@ -117,11 +126,23 @@ Same thing than the Left rectangle method, except that the x value is the right 
 \subsection{Middle rectangle integration method}
 Same thing than Left or Right rectangle method except that the x value is the middle of the interval
 
-\subsection{Trapez integration method}
-This integration method is a mix between the Right and Left rectangle integration method, the only difference is that we compute both images of the left and right bounds to construct a trapez and compute is surface.
+\subsection{Trapezium integration method}
+This integration method is a mix between the Right and Left rectangle integration method, the only difference is that we compute both images of the left and right bounds to construct a trapezium and compute is surface.
 
 \subsection{Simpson integration method}
-COUCOU FLO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+The problem we have with the previous methods is that they just give an average value of the function and do not consider the possible variations.
+The Simpson method propose to approximate the function by a polynomial sum. This way the approximation best respect the curve's variations, by using polynomial the derivate became really easy to compute.
+
+
+\subsection{Convergence power comparison}
+\begin{figure}[!ht]
+    \center
+    \includegraphics{../src/integration.png}
+    \caption{power convergence comparison}
+    \ref{comp}
+\end{figure}
+
+As we can see the Simpson method converges faster then the other ones to the same result.
 
 \section{Computing the pressure map}
 With the airfoil length it is possible to compute the pression of the air around the airfoil.
