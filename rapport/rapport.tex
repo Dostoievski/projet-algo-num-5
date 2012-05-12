@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\usepackage{fancyhdr}
+\lhead{\bsc{Projet Algorithmique Numerique}}
+\rhead{\bsc{Interpolation and integration methods / Cubic splines and surface interpolation}}
+\renewcommand{\headrulewidth}{1px}
+\lfoot{ \bsc{ENSEIRB-MATMECA}}
+\rfoot{ \bsc{Informatique-I1}}
+\renewcommand{\footrulewidth}{1px}
+\pagestyle{fancy}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{textcomp}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage[latin1]{inputenc}
+\usepackage{xcolor}
+
+
+%%%%%%%%%%%%%%%% Variables %%%%%%%%%%%%%%%%
+\def\projet{5}
+\def\titre{Interpolation and integration methods / Cubic splines and surface interpolation}
+\def\groupe{2}
+\def\team{}
+\def\responsible{fmonjalet}
+\def\secretary{tsanchez}
+\def\others{rrasoldier, ylevif}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%% Header %%%%%%%%%%%%%%%%
+\noindent\begin{minipage}{\textwidth}
+    \vskip 0mm
+    \noindent
+    { \begin{tabular}{p{7.5cm}}
+            {\bfseries \sffamily
+            Projet n°\projet}
+            \begin{center}{\itshape \titre}\end{center}
+    \end{tabular}}
+    \hfill 
+    \fbox{\begin{tabular}{l}
+            {~\hfill \bfseries \sffamily Groupe n°\groupe \hspace{3mm} Equipe n°\team \hfill~} \\[2mm] 
+            Responsable : \responsible \\
+            Secrétaire  : \secretary \\
+            Codeurs     : \others
+    \end{tabular}}
+    \vskip 4mm ~
+
+    \parbox{\textwidth}{\small \textit{Abstract : this project goal is to implement a basic model to represent the air flow around an airfoil. With that air flow computation it will then be possible to obtain a pressure map abow and below the wing, so as to approximate the wing's lift (it's ability to sustain the plane in the air)\\
+            This is to be done in two steps :
+            \begin{enumerate}
+                \item refine the airfoil into a sufficiently smooth curve
+                \item compute the pressure map using integration method
+            \end{enumerate}
+        }
+    }
+\end{minipage}
+
+\section{Airfoil refinment using cubic splines}
+The only representation of the wing's airfoil we have so far is a .dat file. So we will have to convert this file into python exploitable datas \\
+In order to be able to exploit it using the python programming language, we are going to convert the .dat file information (a cloud point's positions) into a curve using cubic splines.
+
+
+\section{Computing the length of plane curves : with various integration methods}
+Now that we have a curve representing the airfoil, the next step in our pressure map creation is to find a way to compute the airfoil length.
+To do that we will compute the following formula on our curve. We will use several integration methods, and then comparate the convergence power of each one.
+
+\subsection{Left rectangle integration method}
+This method use a sum of rectangle surfaces in order to approximate the integral value. each one of the rectangle is build the following way :
+\begin{itemize}
+    \item compute the value of f(x) with x the left bound of the interval
+    \item compute the surface of the rectangle with height the f(x) value and widght the length of the interval
+    \item increment x by the step we choose
+\end{itemize}
+
+\subsection{Right rectangle integration method}
+Same thing than the Left rectangle method, except that the x value is the right bound of the interval
+
+\subsection{Middle rectangle integration method}
+Same thing than Left or Right rectangle method except that the x value is the middle of the interval
+
+\subsection{Trapez integration method}
+This integration method is a mix between the Right and Left rectangle integration method, the only difference is that we compute both images of the left and right bounds to construct a trapez and compute is surface.
+
+\subsection{Simpson integration method}
+COUCOU FLO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\section{Computing the pressure map}
+With the airfoil length it is possible to compute the pression of the air around the airfoil.
+Anyway if we want to be able to compute this pression, we will have to model the air flow.
+
+\subsection{Modeling the laminar air flow}
+Even if the real air flow around an airfoil is not laminar, this model have been choose to make the computation easier.
+The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particule.
+
+\subsection{Computing the pressure variation map}
+The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particule travel last the same time, the more length it will have to travel the more pression it will produce on the airfoil. 
+
+\end{document}
