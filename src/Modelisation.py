@@ -77,16 +77,24 @@ def airflow_model(f_int, f_ext):
     mp.clf()
 
 def pressure_to_colour(P, Pbase, Pmax):
-    return (P-Pbase)*10/Pmax
+    return ((P-Pbase)*10/Pmax)**3
     
 
-def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_method, Ps, precision, n):
-    """ Plots colored curbs according to pressure """ 
+def curves_pressure_representation(file_src, file_dest, integration_method, precision, n):
+    """ Plots colored curves according to pressure """
+    
+    (ex, ey, ix, iy) = spl.load_foil(file_src)
+    f_int = spl.cubic_spline_interpolation(ix, iy)
+    f_ext = spl.cubic_spline_interpolation(ex, ey)
+    f_int_d = spl.cubic_spline_interpolation_derivative(ix, iy)
+    f_ext_d = spl.cubic_spline_interpolation_derivative(ex, ey)
+    
     t = np.arange(0.0, 1.0, 0.01)
     lambdaTab = np.arange(0.0,1.0,0.01)
     nbLambda = len(lambdaTab)
     Pressure_Tab = np.zeros(nbLambda)
     Pmax = 1
+    Ps = 0
 
     f_lambda_int_d = f_lambda_d(f_int_d, 0)
     length_int = length_of_curve(f_lambda_int_d, integration_method, min(ix), max(ix), n)
@@ -94,106 +102,31 @@ def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_
     
     mp.clf()
     
-    for i in range(nbLambda):
-        f_lambda_int = f_lambda(f_int, lambdaTab[i], min(iy))
-        f_lambda_int_d = f_lambda_d(f_int_d, lambdaTab[i])
+    for l in lambdaTab:
+        f_lambda_int = f_lambda(f_int, l, min(iy))
+        f_lambda_int_d = f_lambda_d(f_int_d, l)
         length_int = length_of_curve(f_lambda_int_d, integration_method, min(ix), max(ix), n)
-        Pressure_Tab[i] = pressure_on_curve(Ps, length_int)
-        color = pressure_to_colour(Pressure_Tab[i], Pbase, Pmax)
+        pressure = pressure_on_curve(Ps, length_int)
+        color = pressure_to_colour(pressure, Pbase, Pmax)
         f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
-        mp.plot(t,f_lambda_values_int,linewidth=5.0, color=(0, 0, color))
+        mp.plot(t,f_lambda_values_int,linewidth=5.0, color=(color, color**3,0))
         
-    for j in range(nbLambda):
-        f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
-        f_lambda_ext_d = f_lambda_d(f_ext_d, lambdaTab[j])
+    for l in reversed(lambdaTab):
+        f_lambda_ext = f_lambda(f_ext, l, max(ey))
+        f_lambda_ext_d = f_lambda_d(f_ext_d, l)
         length_ext = length_of_curve(f_lambda_ext_d, integration_method, min(ex), max(ex), n)
-        Pressure_Tab[j] = pressure_on_curve(Ps, length_ext)
-        color = pressure_to_colour(Pressure_Tab[j], Pbase, Pmax)
+        pressure = pressure_on_curve(Ps, length_ext)
+        color = pressure_to_colour(pressure, Pbase, Pmax)
         f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
-        mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=(0,0,color))
+        mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=(color,color**3,0))
 
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
     mp.xlabel('x')
     mp.ylabel('y')
     mp.title('Map pressure of the fx63145 (The lighter corresponds to high pressure)')
-    mp.savefig("map_pressure_test.png")
+    mp.savefig(file_dest)
     mp.clf()
 
-
-
-#def matrix_map_pressure(f_d, Ps, precision):
-#    lambdaTab = np.arange(0.0,1.0,precision)
-#    nbLambda = len(lambdaTab)
-#    M = np.zeros([nbLambda,nbLambda])
-#    for i in np.arange(0,nbLambda,1):
-#        for j in np.arange(0,nbLambda,1):
-#            f_lambda = f_lambda_ext(f_d, lambdaTab[i])
-#            f_length = f_length_ext(f_lambda)
-#            M[i,j] = pressure_ext(Ps, f_length)
-#    return M
-
-#def matrix_map_pressure(f_lambda_ext, f_lambda_int)
-
-def plot_pressures_around_airfoil_mat(file_name, size_matrix):
-    """ Plots the pressures around the airfoil defined in the file file_name """
-    (ex, ey, ix, iy) = spl.load_foil(file_name)
-    airfoil_interp_int = spl.cubic_spline_interpolation(ix, iy)
-    airfoil_interp_ext = spl.cubic_spline_interpolation(ex, ey)
-    airfoil_interp_int_d = spl.cubic_spline_interpolation_derivative(ix, iy)
-    airfoil_interp_ext_d = spl.cubic_spline_interpolation_derivative(ex, ey)
-
-    hmax = max(ey)
-    hmin = min(iy)
-
-    nb_lambda = 20.
-    lambda_max = 1.
-    f_lambda_ext = range(0)
-    f_lambda_int = range(0)
-    f_lambda_ext_d = range(0)
-    f_lambda_int_d = range(0)
-
-    t = np.arange(0.0, 1.0, 0.01)
-
-    print "Pas :", lambda_max/nb_lambda
-
-    for l in np.arange(0., lambda_max, (lambda_max / nb_lambda)):
-        f_lambda_ext.append(f_lambda(airfoil_interp_ext, l, hmax))
-        f_lambda_int.append(f_lambda(airfoil_interp_int, l, hmin))
-        f_lambda_ext_d.append(f_lambda_d(airfoil_interp_ext_d, l))
-        f_lambda_int_d.append(f_lambda_d(airfoil_interp_int_d, l))
-        
-
-    N = size_matrix
-    #Matrice...
-    M = np.zeros([N,N])
-
-    for x in np.arange(0.,N):
-        x_real = min(ex) + x * (max(ex) - min(ex))/N
-        for y in np.arange(0.,N):
-            y_real = min(ey) + y * (max(ey) - min(ey))/N
-            # y_real is inside the airfoil
-            if (y_real < airfoil_interp_ext(x_real)) and (y_real > airfoil_interp_int(x_real)):
-                M[x,y] = 0;
-            elif y_real >= airfoil_interp_int(x_real) :
-                i = 0
-                while (y_real >= f_lambda_ext[i](x_real)):
-                    i += 1
-                M[x, y] = pressure_on_curve(0,length_of_curve(f_lambda_ext_d[i], it.simpson, min(ex), max(ex), 100.))
-            else : # Else y_real <= airfoil_interp_int(x_real)
-                i = 0
-                while (y_real <= f_lambda_int[i](x_real)):
-                    i += 1
-                M[x, y] = pressure_on_curve(0,length_of_curve(f_lambda_int_d[i], it.simpson, min(ex), max(ex), 100.))
-
-    return M
-
-            
-def matrix_to_png(matrix, name):
-    """ Converts a matrix in png format picture """
-    mp.clf()
-    mp.imshow(matrix, cmap='hot', interpolation='bilinear')
-    mp.savefig(name)
-    mp.clf()
 
 #------------------------------------------------#
 # TESTS :                                        #
@@ -230,10 +163,10 @@ print pressure_on_curve(Ps, length_ext_b)
 
 airflow_model(int_interp_fun, ext_interp_fun)
 
-curves_pressure_representation(int_interp_fun, int_interp_fun_d, ext_interp_fun, ext_interp_fun_d, it.simpson, 0, 0.1, 50)
-curves_pressure_representation(int_interp_fun, int_interp_fun_d, ext_interp_fun, ext_interp_fun_d, it.rectangle_method_right, 0, 0.1, 50)
+curves_pressure_representation("fx63145.dat", "pressure_curves_simpson.png", it.simpson, 0.1, 100)
+#curves_pressure_representation("fx63145.dat", "pressure_curves_rect_right.png", it.rectangle_method_right, 0.1, 100)
 
-Mat = plot_pressures_around_airfoil_mat("fx63145.dat", 10)
+Mat = plot_pressures_around_airfoil_mat("fx63145.dat", 10.)
 matrix_to_png(Mat, "test_pressure.png")
 
 
