@@ -79,12 +79,12 @@ def airflow_model(f_int, f_ext):
     for i in range(nbLambda):
         f_lambda_int = f_lambda(f_int, lambdaTab[i], min(iy))
         f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
-        mp.plot(t,f_lambda_values_int,linewidth=1.0)
+        mp.plot(t,f_lambda_values_int,linewidth=1.0, color='#0000ff')
         
     for j in range(nbLambda):
         f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
         f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
-        mp.plot(t,f_lambda_values_ext,linewidth=1.0)
+        mp.plot(t,f_lambda_values_ext,linewidth=1.0, color='#0000ff')
 
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
     mp.title('Laminar airflow of the fx63145')
@@ -96,8 +96,9 @@ def pressure_to_colour(P, Pbase, Pmax):
     
 
 def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_method, Ps, precision, n):
+    """ Plots colored curbs according to pressure """ 
     t = np.arange(0.0, 1.0, 0.01)
-    lambdaTab = np.arange(0.0,1.0,0.1)
+    lambdaTab = np.arange(0.0,1.0,0.01)
     nbLambda = len(lambdaTab)
     Pressure_Tab = np.zeros(nbLambda)
     Pmax = 1
@@ -115,7 +116,7 @@ def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_
         Pressure_Tab[i] = pressure_on_curve(Ps, length_int)
         color = pressure_to_colour(Pressure_Tab[i], Pbase, Pmax)
         f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
-        mp.plot(t,f_lambda_values_int,linewidth=5.0, color=(color, 0, 0))
+        mp.plot(t,f_lambda_values_int,linewidth=5.0, color=(0, 0, color))
         
     for j in range(nbLambda):
         f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
@@ -124,10 +125,10 @@ def curves_pressure_representation(f_int, f_int_d, f_ext,  f_ext_d, integration_
         Pressure_Tab[j] = pressure_on_curve(Ps, length_ext)
         color = pressure_to_colour(Pressure_Tab[j], Pbase, Pmax)
         f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
-        mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=(color,0,0))
+        mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=(0,0,color))
 
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
-    mp.title('map pressure of the fx63145')
+    mp.title('Map pressure of the fx63145 (The lighter corresponds to high pressure)')
     mp.savefig("map_pressure_test.png")
     mp.clf()
 
@@ -201,7 +202,7 @@ def plot_pressures_around_airfoil_mat(file_name, size_matrix):
 
             
 def matrix_to_png(matrix, name):
-    """ Convertit une matrice matrix en une image png """
+    """ Converts a matrix in png format picture """
     mp.clf()
     mp.imshow(matrix, cmap='hot', interpolation='bilinear')
     mp.savefig(name)
@@ -240,10 +241,9 @@ print pressure_on_curve(Ps, length_ext_b)
 #M = matrix_map_pressure(ext_interp_fun_d, 1, 1, 0.1)
 #print matrix_to_png(M, "Map_pressure.png")
 
+airflow_model(int_interp_fun, ext_interp_fun)
 
 curves_pressure_representation(int_interp_fun, int_interp_fun_d, ext_interp_fun, ext_interp_fun_d, it.simpson, 0, 0.1, 50)
-
-#airflow_model(int_interp_fun, ext_interp_fun)
 
 Mat = plot_pressures_around_airfoil_mat("fx63145.dat", 10)
 matrix_to_png(Mat, "test_pressure.png")
