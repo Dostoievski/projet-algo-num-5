@@ -56,11 +56,11 @@
     \end{tabular}}
     \vskip 4mm ~
 
-    \parbox{\textwidth}{\small \textit{Abstract :} the goal of this project was to implement a basic model to represent the airflow around an airfoil. With that airflow model, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air). This is to be done in two steps :
-      \begin{enumerate}
-      \item refining the airfoil into a sufficiently smooth curve;
-      \item computing the pressure map using an integration method.
-      \end{enumerate}
+    \parbox{\textwidth}{\small \textit{Abstract :} the goal of this project was to implement a basic model to represent the airflow around an airfoil. With that airflow model, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air). This is to be done in two steps : refining the airfoil into a sufficiently smooth curve, and then computing the pressure map using an integration method.
+%      \begin{enumerate}
+%      \item refining the airfoil into a sufficiently smooth curve;
+%      \item computing the pressure map using an integration method.
+%      \end{enumerate}
     }
     \vskip 1mm ~  
 \end{minipage}
@@ -258,13 +258,15 @@ On these graphs, the function chosen is representative of the global results we 
 
 In every case we saw, the Simpson method clearly seems to be the best.
 
+The complexity of each method is $\mathcal{O}(n)$ in terms of $f$ calls ($n$ being the number of intervals).
+
 \section{Computing the Pressure Map}
 The airfoil length is required to compute the pressure of the air around the airfoil.
 In order to compute this pressure, we have to model the airflow.
 
 \subsection{Modeling the Laminar Airflow}
 Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier.
-The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}.
+The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}).
 
 \begin{figure}
 
@@ -281,7 +283,7 @@ To build this graph, a lot of airflow paths are traced to reduce the gap between
 
 \begin{figure}[h]
   \begin{minipage}{0.45\textwidth}
-    \includegraphics[scale=0.4]{../src/airflows.png}
+    \includegraphics[scale=0.4]{../src/airflow.png}
     \label{airflow}
     \caption{The airflow shape around the airfoil}
   \end{minipage}
