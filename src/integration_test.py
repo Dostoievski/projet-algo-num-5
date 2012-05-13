@@ -16,7 +16,7 @@ real_value = (b**6/6. - a**6/6.)
 
 n = 1000.
 
-print "Valeur théorique :", real_value
+print "theorical value :", real_value
 print rectangle_method_left(f, a, b, n)
 print rectangle_method_right(f, a, b, n)
 print rectangle_method_middle(f, a, b, n)
