@@ -6,7 +6,7 @@
 \rhead{\textsc{Interpolation and Integration Methods}}
 \renewcommand{\headrulewidth}{1px}
 \lfoot{ \textsc{ENSEIRB-MATMECA}}
-\rfoot{ \textsc{Informatique-I1}}
+\rfoot{ \textsc{Computer Science - I1}}
 \renewcommand{\footrulewidth}{1px}
 \pagestyle{fancy}
 
@@ -21,6 +21,10 @@
 \usepackage{mathrsfs}
 \usepackage[latin1]{inputenc}
 \usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
 
 
 %%%%%%%%%%%%%%%% Variables %%%%%%%%%%%%%%%%
@@ -40,7 +44,7 @@
 \noindent
     { \begin{tabular}{p{7.5cm}}
         {\bfseries \sffamily
-          Projet n°\projet}
+          Project n°\projet}
         \begin{center}{\itshape \titre}\end{center}
     \end{tabular}}
     \hfill 
@@ -62,7 +66,7 @@
 \end{minipage}
 
 \section{Airfoil refinement using cubic splines}
-The only representation of the wing's airfoil available so far is a .dat file describing a cloud of points. So this file has to be converted into python exploitable datas.
+The only wing airfoil representation available so far is a .dat file describing a cloud of points. So this file has to be converted into python exploitable data.
 
 In order to be able to work on it using the python programming language, the .dat file information\footnote{The point cloud positions} has to be converted into a smooth curve. To obtain that curve, the points describing the upper part (named extrados) and the lower part (named intrados) of the airfoil will be interpolated using cubic splines.
 
@@ -71,29 +75,58 @@ To do this interpolation the best way possible, the method and formulas given by
 
 \begin{equation}
 \label{interp_form_1}
-  interp(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y"_i + D(x)*y"_{i+1}
+  interp(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y''_i + D(x)*y''_{i+1}
 \end{equation}
 
 The first thing to carry out is to find the second derivatives of the curve at the points corresponding to $x_i, \: i \in [0,N-1]$. It can be done by solving a equation system. Indeed, all the $y_i, \: i \in [1,N-2]$ are linked by the following equation :
 
 \begin{equation}
-  TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+ \frac{x_i - x_{i-1}}{6}*y''_{i-1} + \frac{x_{i+1} - x_{i-1}}{3}*y''_{i} + \frac{x_{i+1} - x_i}{6}*y''_{i+1} = \frac{y_{i+1} - y_i}{x_{i+1} - x_i} - \frac{y_{i} - y_{i-1}}{x_{i} - x_{i-1}}
 \end{equation}
 
-There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose to set them to $0$. Once the values are set up, the system is solved. The whole process is summed up by this algorithm:
+There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose to set them to $0$. Once the values are set up, the system is solved. The whole process is summed up by algorithm \ref{interp_precalc}.
 
-\textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
+\begin{algorithm}
+  \caption{Pre-calculus of the second derivatives for the cubic spline interpolation}
+  \label{interp_precalc}
+  \begin{algorithmic}[1]
+    \Function{$cubic\_spline\_interpolation$}{$X:abscissa of the points, Y:ordinates of the points$}
+    \State $N \gets size(X); \quad Y'' \gets null\_vector(N)$
+    \State $Mat\_coeff \gets null\_matrix(N,N)$
+    \State $Mat\_coeff[0, 0] \gets 1 ; \quad Mat\_coeff[N-1, N-1] \gets 1$
+    \For{$i = 0 \to N-1$}
+    \State{$Mat\_coeff[i, i-1] \gets (X[i] - X[i-1])/6$}
+    \State{$Mat\_coeff[i, i] \gets (X[i+1] - X[i-1])/3$}
+    \State{$Mat\_coeff[i, i+1] \gets (X[i+1] - X[i])/6$}
+    \State{$Images[i] \gets (Y[i+1] - Y[i])/(X[i+1] - X[i]) - (Y[i] - Y[i-1])/(X[i] - X[i-1])$}
+    \EndFor
+    \State{$Y'' \gets solve\_linear\_system(Mat\_coeff, Images)$}
+    \State \Return{$Y''$}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
-Once this system is solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ are comuted, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} is calculated.
+
+Once this system is solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ are computed, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} is calculated.
 
 The result is right, but one problem remains : the $interp(x)$ evaluation complexity is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
 
 \subsection{Optimisation}
-Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved every time $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we choosed to use functional programming, as shown in this algorithm:
+Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved every time $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we chose to use functional programming, as shown in algorithm \ref{interp_calc}.
 
-\textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
+\begin{algorithm}
+  \caption{Computation of the cubic spline interpolation function}
+  \label{interp_calc}
+  \begin{algorithmic}[1]
+    \Function{$cubic\_splines\_interpolation\_precalc$}{$X:abscissa of the points, Y:ordinates of the points$}
+    \State $N \gets size(X)$
+    \State{$Y'' \gets cubic\_splines\_interpolation\_precalc(X,Y)$}
+    \State \Return{$lambda(x) : cubic\_splines\_interpolation\_calc(X,Y,Y'',x)$}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
-The cubic\_splines\_interpolation\_precalc function pre computes the values of the second derivatives, and the function returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter: it memorizes the values of the second derivatives.
+The cubic\_splines\_interpolation\_precalc function pre computes the values of the second derivatives, and the cubic\_splines\_interpolation\_calc function that is returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter, in order to return the interpolation value in $x$. The function returned memorizes the values of the second derivatives.
 
 The final complexity of this process is: $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
 
@@ -154,7 +187,7 @@ This integration method is a mix between the Right and Left rectangle integratio
 
 \subsection{Simpson integration method}
 The problem we have with the previous methods is that they just give an average value of the function and do not take the possible variations into account.
-The Simpson method approximates the function by a polynomial sum. This way the approximation respects the variations of the curve, and thanks to the use of polynomials, the derivate became really easy to compute.
+The Simpson method approximates the function by a polynomial sum. This way the approximation respects the variations of the curve, and thanks to the use of polynomials, the derivative became really easy to compute.
 
 
 \subsection{Convergence power comparison}
