@@ -61,7 +61,7 @@
     \vskip 1mm ~  
 \end{minipage}
 
-\section{Airfoil refinment using cubic splines}
+\section{Airfoil refinement using cubic splines}
 The only representation of the wing's airfoil available so far is a .dat file describing a cloud of points. So this file has to be converted into python exploitable datas.
 
 In order to be able to work on it using the python programming language, the .dat file information\footnote{The point cloud positions} has to be converted into a smooth curve. To obtain that curve, the points describing the upper part (named extrados) and the lower part (named intrados) of the airfoil will be interpolated using cubic splines.
@@ -89,11 +89,11 @@ Once this system is solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ are 
 The result is right, but one problem remains : the $interp(x)$ evaluation complexity is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
 
 \subsection{Optimisation}
-Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved everytime $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we chosed to use functionnal programming, as shown in this algorithm:
+Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved every time $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we choosed to use functional programming, as shown in this algorithm:
 
 \textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
 
-The cubic\_splines\_interpolation\_precalc function precomputes the values of the second derivatives, and the function returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter: it memorizes the values of the second derivatives.
+The cubic\_splines\_interpolation\_precalc function pre computes the values of the second derivatives, and the function returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter: it memorizes the values of the second derivatives.
 
 The final complexity of this process is: $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
 
@@ -181,12 +181,17 @@ The airfoil length is needed to compute the pressure of the air around the airfo
 In order to compute the pressure, we have to model the air flow.
 
 \subsection{Modeling the laminar air flow}
-Even if the real air flow around an airfoil is not laminar, this model have been choosen to make the computation easier.
-The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particule.
+Even if the real air flow around an airfoil is not laminar, this model have been chosen to make the computation easier.
+The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particle.
 Given the formula resulted from of the interpolation of the points of the airfoil, each curve was computed from the extrados formula or from the intrados formula like this : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation.
 
 
 \subsection{Computing the pressure variation map}
-The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particule takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particule will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law. 
+The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particle will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law.
+
+\section{Conclusion}
+
+This project has been an opportunity to understand the implication of every module which is to be involve in a program. Indeed the integral computation used here could seems to be a small part of this project, but seeing the convergence speed comparison results we realized that it is one of the more important part in term of performance.
+Moreover it still remain interesting to apply mathematical concept to a very concrete purpose.
 
 \end{document}
