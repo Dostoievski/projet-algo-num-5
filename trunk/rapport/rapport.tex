@@ -250,7 +250,13 @@ I(f,a,b,n) = h * \sum_{k = 1}^{N-1} \frac{1/6} f(a+(k-1)h) + \frac{2/3} f(a+(k-0
   \end{minipage}
 \end{figure}
 
-As we can see the Simpson method converges faster than the other ones to the same result.
+As we can see on figure \ref{error_integration} and even more on figure \ref{log_error_integration} is that the Simpson method converges faster than the other ones.
+
+With the logarithmic errors, we can determine more precisely, the convergence speed of the various methods. Indeed, the slope of the straight line provides the convergence speed, because powers become multiplicative factors in logarithmic scales. What can be seen is that the left and right rectangle method converge with a $\mathcal{O}(n)$ speed ($n$ being the number of iterations). The middle rectangle and trapezium method converge with a $\mathcal{O}(n^2)$ speed, and the Simpson method with a $\mathcal{O}(n^3)$ speed.
+
+On these graphs, the function chosen is representative of the global results we found, but for the function $f(x) = \sqrt{1-x^2}$ on the interval $[-1,1]$ all the method converge with the same speed. We think that it's linked with the fact that this function is not derivable on $-1$ and $1$, but we had not the time to develop it.
+
+In every case we saw, the Simpson method clearly seems to be the best.
 
 \section{Computing the pressure map}
 The airfoil length is needed to compute the pressure of the air around the airfoil.
