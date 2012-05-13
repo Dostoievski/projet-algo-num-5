@@ -43,7 +43,7 @@ def rectangle_method_middle(f, a, b, n):
 
 
 def trapez_method(f, a, b, n):
-    """returns the integral values of f between a and b with n iteration using the trapez method"""
+    """returns the integral values of f between a and b with n iteration using the trapezium method"""
     h = (b - a)/n
     add = 0
     for k in np.arange(1,n):
@@ -53,7 +53,7 @@ def trapez_method(f, a, b, n):
     return add
 
 def simpson(f, a, b, n):
-    """returns the integral values of f between a and b with n iteration using the simpson method"""
+    """returns the integral values of f between a and b with n iteration using the Simpson method"""
     h = (b - a)/n
     add = 0.
     for k in np.arange(1,n+1):

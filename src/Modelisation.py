@@ -24,7 +24,7 @@ int_interp_fun_d = spl.cubic_spline_interpolation_derivative(ix, iy)
 #------------------------------------------------#
   
 def f_lambda(f, l, hmax):
-    """ Computes the curves followed by the air particules. f : the function defining one half of the airfoil, l : lambda (greater lambda is, closer to the airfoil is the curve)"""
+    """ Computes the curves followed by the air particles. f : the function defining one half of the airfoil, l : lambda (greater lambda is, closer to the airfoil is the curve)"""
     return lambda(x):3*l*hmax + (1-l)*f(x)
 
 def f_lambda_d(f_d, l):
@@ -38,7 +38,7 @@ def length_of_curve(f_d, integration_method, min_x, max_x, n):
     return t
 
 def pressure_on_curve(Ps, length):
-    """ Returns the pressure on a curve. Ps : static pressure, length : longueur de la courbe """
+    """ Returns the pressure on a curve. Ps : static pressure, length : length of the curve """
     r = 1
     v = length/1
     return Ps + 0.5 * r * v**2
@@ -55,7 +55,7 @@ def curve(f,n,t):
 
 
 def airflow_model(f_int, f_ext):
-    """ Generates the paths followed by the air particules around the airfoil defined by f_int and f_ext """
+    """ Generates the paths followed by the air particles around the airfoil defined by f_int and f_ext """
     t = np.arange(0.0, 1.0, 0.01)
     lambdaTab = np.arange(0.0,1.0,0.1)  
     nbLambda = len(lambdaTab)
@@ -134,7 +134,7 @@ def curves_pressure_representation(file_src, file_dest, integration_method, prec
 # TESTS :                                        #
 #------------------------------------------------#
 
-print " \n ### With simpsons integrals ### \n"
+print " \n ### With Simpsons integrals ### \n"
 print " \n ########### EXTRADOS ########## \n "
 
 f_lambda_ext_d_a = f_lambda_d(ext_interp_fun_d, 0.1)
