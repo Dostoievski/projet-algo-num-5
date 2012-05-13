@@ -2,13 +2,14 @@
 
 \usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 \usepackage{fancyhdr}
-\lhead{\bsc{Projet Algorithmique Numerique}}
-\rhead{\bsc{Interpolation and integration methods / Cubic splines and surface interpolation}}
+\lhead{\textsc{Numerical Algorithmic Projetc}}
+\rhead{\textsc{Interpolation and Integration Methods}}
 \renewcommand{\headrulewidth}{1px}
-\lfoot{ \bsc{ENSEIRB-MATMECA}}
-\rfoot{ \bsc{Informatique-I1}}
+\lfoot{ \textsc{ENSEIRB-MATMECA}}
+\rfoot{ \textsc{Informatique-I1}}
 \renewcommand{\footrulewidth}{1px}
 \pagestyle{fancy}
+
 \usepackage{wrapfig}
 \usepackage{multicol}
 \usepackage{textcomp}
@@ -35,89 +36,111 @@
 
 %%%%%%%%%%%%%%%% Header %%%%%%%%%%%%%%%%
 \noindent\begin{minipage}{\textwidth}
-    \vskip 0mm
-    \noindent
+\vskip 0mm
+\noindent
     { \begin{tabular}{p{7.5cm}}
-            {\bfseries \sffamily
-            Projet n°\projet}
-            \begin{center}{\itshape \titre}\end{center}
+        {\bfseries \sffamily
+          Projet n°\projet}
+        \begin{center}{\itshape \titre}\end{center}
     \end{tabular}}
     \hfill 
     \fbox{\begin{tabular}{l}
-            {~\hfill \bfseries \sffamily Groupe n°\groupe \hspace{3mm} Equipe n°\team \hfill~} \\[2mm] 
-            Responsable : \responsible \\
-            Secrétaire  : \secretary \\
-            Codeurs     : \others
+        {~\hfill \bfseries \sffamily Groupe n°\groupe \hspace{3mm} Equipe n°\team \hfill~} \\[2mm] 
+        Responsable : \responsible \\
+        Secrétaire  : \secretary \\
+        Codeurs     : \others
     \end{tabular}}
     \vskip 4mm ~
 
-    \parbox{\textwidth}{\small \textit{Abstract : the goal of this project is to implement a basic model to represent the airflow around an airfoil. With that air flow computation, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air)\\
-            This is to be done in two steps :
-            \begin{enumerate}
-                \item refine the airfoil into a sufficiently smooth curve;
-                \item compute the pressure map using an integration method.
-            \end{enumerate}
-        }
+    \parbox{\textwidth}{\small \textit{Abstract :} the goal of this project was to implement a basic model to represent the airflow around an airfoil. With that airflow model, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air). This is to be done in two steps :
+      \begin{enumerate}
+      \item refining the airfoil into a sufficiently smooth curve;
+      \item computing the pressure map using an integration method.
+      \end{enumerate}
     }
+    \vskip 1mm ~  
 \end{minipage}
 
 \section{Airfoil refinment using cubic splines}
-The only representation of the wing's airfoil we have so far is a .dat file describing a cloud of points. So we will have to convert this file into python exploitable datas.
+The only representation of the wing's airfoil available so far is a .dat file describing a cloud of points. So this file has to be converted into python exploitable datas.
 
-In order to be able to work on it using the python programming language, we need to convert the .dat file information (a the positions of a cloud of points) into a smooth curve. To get that curve, we will interpolate the points describing the upper part (Extrados) and the lower part (Intrados) of the airfoil using cubic splines.
+In order to be able to work on it using the python programming language, the .dat file information\footnote{The point cloud positions} has to be converted into a smooth curve. To obtain that curve, the points describing the upper part (named extrados) and the lower part (named intrados) of the airfoil will be interpolated using cubic splines.
+
 \subsection{How to interpolate a cloud of points with cubic splines}
-To do this interpolation the best way that we could, we used the method and formulas given by the \textit{Numerical Recipes in C}. We assume that we have a cloud of points $(x_i, y_i), i \in [0,N-1]$. There are two main parts of pre-calculus to be able to get the interpolation on a point, given by the formula :
+To do this interpolation the best way possible, the method and formulas given by the \textit{Numerical Recipes in C} were used. We assume that a cloud of points $(x_i, y_i), \: i \in [0,N-1]$ is provided. There are two main parts of pre-calculus to be able to get the interpolation on any $x \in [x_0, x_{N-1}]$ point, given by the equation \ref{interp_form_1}:
 
 \begin{equation}
-f(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y"_i + D(x)*y"_{i+1}
+\label{interp_form_1}
+  interp(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y"_i + D(x)*y"_{i+1}
 \end{equation}
 
-The first is to find the second derivatives of the curve in the points corresponding to $x_i, i \in [0,N-1]$. It can be done by solving a system of equations. Indeed, all the $y_i, i \in [1,N-2]$ are linked by the following equation :
+The first thing to carry out is to find the second derivatives of the curve at the points corresponding to $x_i, \: i \in [0,N-1]$. It can be done by solving a equation system. Indeed, all the $y_i, \: i \in [1,N-2]$ are linked by the following equation :
 
 \begin{equation}
-TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+  TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 \end{equation}
 
-There are multiple choices for the values of $y_0$ and $y_{N-1}$. We chose to set them to $0$. Then, we solve the system. The whole process is summed up by this algorithm :
+There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose to set them to $0$. Once the values are set up, the system is solved. The whole process is summed up by this algorithm:
 
 \textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
 
-Once we have solved this system, we compute the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$, with the formulas given by the \textit{Numerical Recipes in C}, and we can calculate $f(x)$, the value of the cubic splines interpolation of the cloud of points in $x$.
+Once this system is solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ are comuted, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} is calculated.
 
-The result is right, but there is one remaining problem : the complexity of evaluating $f(x)$ is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
+The result is right, but one problem remains : the $interp(x)$ evaluation complexity is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
 
 \subsection{Optimisation}
-Now that we have computed everything to calculate $f(x)$, we notice that without optimisation, the system of equations to find all the second derivatives will be solved at each evaluation of $f(x)$, and lots of time will be lost. To avoid this problem, we chosed to use functionnal programming, as shown in this algorithm :
+Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved everytime $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we chosed to use functionnal programming, as shown in this algorithm:
 
 \textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
 
-The cubic\_splines\_interpolation\_precalc function precomputes the values of the second derivatives, and the function we return only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter : it memorizes the values of the second derivatives.
+The cubic\_splines\_interpolation\_precalc function precomputes the values of the second derivatives, and the function returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter: it memorizes the values of the second derivatives.
 
-The final complexity of this process is :  $\mathcal{O}(N^3)$ to get the interpolating function, and  $\mathcal{O}(N)$ to evaluate it (it is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
+The final complexity of this process is: $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
 
 \subsection{Computing the derivative}
-Why we have done that, how (easy).
+For the second part of this project, a cubic spline derivative function had to be computed. The process won't be detailed here because it is mainly the same as the computation of the cubic spline function. The only thing that changes is when $A$, $B$, $C$ and $D$ are computed, we use the derivative of these coefficient with respect to $x$.
+
+To sum up, all that have to be done is to compute the formal derivative of $A$, and all the other coefficient will be easily calculated by using it. This algorithm complexity is exactly the same as the previous one:  $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it
+
+\subsection{Results}
+Figure \ref{res_interp_1} shows a function and its interpolation using cubic splines, with just a few points. Figure \ref{res_interp_2} shows the airfoil interpolation and its derivative.
+
+\begin{figure}[h]
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/interpolation_of_the_airfoil.png} 
+    \caption{$e^{-x^2}$ and its interpolation TO CHAAAAAAAAAAAAAANGE}
+    \label{res_interp_1}
+  \end{minipage}
+  %%%%%%%%%%%
+  \hspace{0.1\textwidth}
+  %%%%%%%%%%%
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/interpolation_derivative.png}
+    \caption{The airfoil interpolation and its derivative}
+    \label{res_interp_2}
+  \end{minipage}
+\end{figure}
 
 
 \section{Computing the length of plane curves : with various integration methods}
 Now that we have a curve representing the airfoil, the next step in our pressure map creation is to find a way to compute the airfoil length.
 To do that we will have to compute the following formula on our curve.
 \begin{equation}
-    L([0;T]) = \int_{0}^{T} \sqrt{1 + f'(x)^2}dx
+  L([0;T]) = \int_{0}^{T} \sqrt{1 + f'(x)^2}dx
 \end{equation}
 We will use several integration methods, and then compare the convergence power of each one.
 Every single one of the methods listed bellow uses follows the same stages to compute the integral value of a function on a interval and with a given step :
 \begin{itemize}
-    \item compute the value of the integral on the first interval
-    \item increment the interval bounds by the step compute the integral on the new one and add this value to the previous
-    \item stop when the last interval has been calculated
+\item compute the value of the integral on the first interval
+\item increment the interval bounds by the step compute the integral on the new one and add this value to the previous
+\item stop when the last interval has been calculated
 \end{itemize}
-The only thing that will change is the method used in order to compute the integral value
+The only thing that will change is the method used in order to compute the integral value.
 
 \subsection{Left rectangle integration method}
 \begin{itemize}
-    \item compute the value of $f(x)$ with x the left bound of the interval
-    \item compute the surface of the rectangle having $f(x)$  as height and the interval's size as width 
+\item compute the value of $f(x)$ with x the left bound of the interval
+\item compute the surface of the rectangle having $f(x)$  as height and the interval's size as width 
 \end{itemize}
 
 \subsection{Right rectangle integration method}
@@ -135,11 +158,20 @@ The Simpson method approximates the function by a polynomial sum. This way the a
 
 
 \subsection{Convergence power comparison}
-\begin{figure}[!ht]
-    \center
-    \includegraphics{../src/integration.png}
-    \caption{power convergence comparison}
-    \ref{comp}
+\begin{figure}[h]
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/errors_integration.png}
+    \caption{Error of the integration methods with respect to the number of points taken}
+    \label{error_integration}
+  \end{minipage}
+  %%%%%%%%%%%
+  \hspace{0.1\textwidth}
+  %%%%%%%%%%%
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/log_errors_integration.png}
+    \caption{Error of the integration methods with respect to the number of points taken (logarithmic scales)}
+    \label{log_error_integration}
+  \end{minipage}
 \end{figure}
 
 As we can see the Simpson method converges faster than the other ones to the same result.
