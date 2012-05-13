@@ -55,16 +55,16 @@
             This is to be done in two steps :
             \begin{enumerate}
                 \item refine the airfoil into a sufficiently smooth curve;
-                \item compute the pressure map using integration method.
+                \item compute the pressure map using an integration method.
             \end{enumerate}
         }
     }
 \end{minipage}
 
 \section{Airfoil refinment using cubic splines}
-The only representation of the wing's airfoil we have so far is a dat file describing a cloud of points. So we will have to convert this file into python exploitable datas.
+The only representation of the wing's airfoil we have so far is a .dat file describing a cloud of points. So we will have to convert this file into python exploitable datas.
 
-In order to be able to work with it using the python programming language, we are going to convert the dat file information (a the positions of a cloud of points) into a smooth curve. To get that curve, what we are going to do is to interpolate the curves described by the upper and the lower parts of the airfoil using cubic splines.
+In order to be able to work on it using the python programming language, we need to convert the .dat file information (a the positions of a cloud of points) into a smooth curve. To get that curve, we will interpolate the points describing the upper part (Extrados) and the lower part (Intrados) of the airfoil using cubic splines.
 \subsection{How to interpolate a cloud of points with cubic splines}
 To do this interpolation the best way that we could, we used the method and formulas given by the \textit{Numerical Recipes in C}. We assume that we have a cloud of points $(x_i, y_i), i \in [0,N-1]$. There are two main parts of pre-calculus to be able to get the interpolation on a point, given by the formula :
 
@@ -78,13 +78,13 @@ The first is to find the second derivatives of the curve in the points correspon
 TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 \end{equation}
 
-There are multiple choices for the values of $y_0$ and $y_{N-1}$. We chose to set them to $0$. Then, we solve the system. The whole process is resumed by this algorithm :
+There are multiple choices for the values of $y_0$ and $y_{N-1}$. We chose to set them to $0$. Then, we solve the system. The whole process is summed up by this algorithm :
 
 \textbf{TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO}
 
 Once we have solved this system, we compute the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$, with the formulas given by the \textit{Numerical Recipes in C}, and we can calculate $f(x)$, the value of the cubic splines interpolation of the cloud of points in $x$.
 
-The result is right, but one problem is remaining : the complexity of evaluating $f(x)$ is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
+The result is right, but there is one remaining problem : the complexity of evaluating $f(x)$ is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
 
 \subsection{Optimisation}
 Now that we have computed everything to calculate $f(x)$, we notice that without optimisation, the system of equations to find all the second derivatives will be solved at each evaluation of $f(x)$, and lots of time will be lost. To avoid this problem, we chosed to use functionnal programming, as shown in this algorithm :
@@ -117,7 +117,7 @@ The only thing that will change is the method used in order to compute the integ
 \subsection{Left rectangle integration method}
 \begin{itemize}
     \item compute the value of $f(x)$ with x the left bound of the interval
-    \item compute the surface of the rectangle with $f(x)$ height and the interval's size width 
+    \item compute the surface of the rectangle having $f(x)$  as height and the interval's size as width 
 \end{itemize}
 
 \subsection{Right rectangle integration method}
@@ -127,11 +127,11 @@ Same thing than the Left rectangle method, except that the x value is the right 
 Same thing than Left or Right rectangle method except that the x value is the middle of the interval
 
 \subsection{Trapezium integration method}
-This integration method is a mix between the Right and Left rectangle integration method, the only difference is that we compute both images of the left and right bounds to construct a trapezium and compute is surface.
+This integration method is a mix between the Right and Left rectangle integration method, the only difference is that we compute both images of the left and right bounds to construct a trapezium and compute its surface.
 
 \subsection{Simpson integration method}
-The problem we have with the previous methods is that they just give an average value of the function and do not consider the possible variations.
-The Simpson method propose to approximate the function by a polynomial sum. This way the approximation best respect the curve's variations, by using polynomial the derivate became really easy to compute.
+The problem we have with the previous methods is that they just give an average value of the function and do not take the possible variations into account.
+The Simpson method approximates the function by a polynomial sum. This way the approximation respects the variations of the curve, and thanks to the use of polynomials, the derivate became really easy to compute.
 
 
 \subsection{Convergence power comparison}
@@ -142,17 +142,19 @@ The Simpson method propose to approximate the function by a polynomial sum. This
     \ref{comp}
 \end{figure}
 
-As we can see the Simpson method converges faster then the other ones to the same result.
+As we can see the Simpson method converges faster than the other ones to the same result.
 
 \section{Computing the pressure map}
-With the airfoil length it is possible to compute the pression of the air around the airfoil.
-Anyway if we want to be able to compute this pression, we will have to model the air flow.
+The airfoil length is needed to compute the pressure of the air around the airfoil.
+In order to compute the pressure, we have to model the air flow.
 
 \subsection{Modeling the laminar air flow}
-Even if the real air flow around an airfoil is not laminar, this model have been choose to make the computation easier.
+Even if the real air flow around an airfoil is not laminar, this model have been choosen to make the computation easier.
 The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particule.
+Given the formula resulted from of the interpolation of the points of the airfoil, each curve was computed from the extrados formula or from the intrados formula like this : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation.
+
 
 \subsection{Computing the pressure variation map}
-The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particule travel last the same time, the more length it will have to travel the more pression it will produce on the airfoil. 
+The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particule takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particule will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law. 
 
 \end{document}
