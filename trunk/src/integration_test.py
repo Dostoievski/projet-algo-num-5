@@ -16,7 +16,7 @@ real_value = (b**6/6. - a**6/6.)
 
 n = 1000.
 
-print "theorical value :", real_value
+print "theoretical value :", real_value
 print rectangle_method_left(f, a, b, n)
 print rectangle_method_right(f, a, b, n)
 print rectangle_method_middle(f, a, b, n)
@@ -114,8 +114,8 @@ l_fcts = (rectangle_method_left,
 l_labels = ("rectangle_method_left",
             "rectangle_method_right",
             "rectangle_method_middle",
-            "trapez_method",
-            "simpson")
+            "trapezium_method",
+            "Simpson")
 
 
 n = 300.

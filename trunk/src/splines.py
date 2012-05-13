@@ -10,7 +10,7 @@ import matplotlib.pyplot as mp;
 # Reads a file whose lines contain coordinates of points,
 # separated by an empty line.
 # Every line not containing a couple of floats is discarded. 
-# Returns a couple constitued of the list of points of the
+# Returns a couple constituted of the list of points of the
 # extrados and the intrados. 
 def load_foil(file):
     f = open(file, 'r')
@@ -76,7 +76,7 @@ def cubic_spline_interpolation_calc(X,Y,Ypp,x):
             # --- The 4 factors  ---
             A = (X[i+1] - x) / (X[i+1] - X[i])
             B = 1. - A
-            opt_var = (1./6.) * (X[i+1] - X[i])**2 # Optimisation légère du calcul
+            opt_var = (1./6.) * (X[i+1] - X[i])**2 # slight optimisation
             #print "Xs :", X[i], X[i+1]
             C = (A**3 - A) * opt_var
             D = (B**3 - B) * opt_var
@@ -114,7 +114,7 @@ def cubic_spline_interpolation_derivative_calc(X,Y,Ypp,x):
             Ap = -1. / (X[i+1] - X[i])
             B = 1. - A
             Bp = 1. - Ap
-            opt_var = (1./6.) * (X[i+1] - X[i])**2 # Optimisation légère du calcul
+            opt_var = (1./6.) * (X[i+1] - X[i])**2 # slight optimisation
             C = (3.*Ap*(A**2) - Ap) * opt_var
             D = (3.*Bp*(B**2) - Bp) * opt_var
 
