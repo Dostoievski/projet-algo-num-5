@@ -262,18 +262,17 @@ In every case we saw, the Simpson method clearly seems to be the best.
 The airfoil length is needed to compute the pressure of the air around the airfoil.
 In order to compute the pressure, we have to model the air flow.
 
-\subsection{Modeling the laminar air flow}
-Even if the real air flow around an airfoil is not laminar, this model have been chosen to make the computation easier.
-The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particle.
+
+\subsection{Modeling the laminar airflow}
+Even if the real air flow around an airfoil is not laminar, this model have been choosen to make the computation easier.
+The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particule.
 Given the formula resulted from of the interpolation of the points of the airfoil, each curve was computed from the extrados formula or from the intrados formula like this : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation.
+The algorithm consists on create a loop ''for`` for generating the number of lambda function wanted. This loop is easily formed : we calculate the lambda function from the spline cubic function and we plot this function.
+
 
 
 \subsection{Computing the pressure variation map}
-The pressure on the airfoil will then depend of the length of each path. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particle will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law.
-
-\section{Conclusion}
-
-This project has been an opportunity to understand the implication of every module which is to be involve in a program. Indeed the integral computation used here could seems to be a small part of this project, but seeing the convergence speed comparison results we realized that it is one of the more important part in term of performance.
-Moreover it still remain interesting to apply mathematical concept to a very concrete purpose.
+Then the pressure on the airfoil will depend of the length of each path. Indeed we assume that every air particule takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particule will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law. 
+To build this graph, we inspired us from the laminar airflow algorithm. That is to say, we built the same curves but we added more lambda functions to reduce the gap between each curve and we colorize each one with a colour corresponding to a pressure value thanks to the pressure\_to\_colour function : to each pressure calculated from the length of a lambda function, we associate a colour (less or more) lighter. And here we have the feeling of a true colour gradient.
 
 \end{document}
