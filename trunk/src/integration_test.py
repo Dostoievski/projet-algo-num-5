@@ -6,13 +6,17 @@ from integration import *
 # TESTS :                                        #
 #------------------------------------------------#
 
-#f = lambda(x): np.sqrt(1-x**2)
 f = lambda(x): x**5
 a = -0.5
 b = 1.
 
-#real_value = np.pi/2
 real_value = (b**6/6. - a**6/6.)
+
+# Special integral, all the methods converges at the same speed with it
+# f = lambda(x): np.sqrt(1-x**2)
+# real_value = np.pi/2
+# a = -1
+# b = 1
 
 n = 1000.
 
@@ -42,7 +46,6 @@ def curve(f,n,t):
     curve_values = np.arange(0.,n)
     for i in np.arange(n):
         curve_values[i] = f(t[i])
-        #print "curve :", curve_values[i], "f(t) :", f(t[i])
     return curve_values
 
 n=10.
