@@ -53,7 +53,7 @@ def cubic_spline_interpolation_precalc(X,Y):
     Mat_coeff[0,0] = 1 # Limit conditions
     Mat_coeff[N-1,N-1] = 1
     Images[0] = 0
-    Images[1] = 0
+    Images[N-1] = 0
     
     for i in np.arange(1,N-1):
         Mat_coeff[i, i-1] = (X[i] - X[i-1])/6

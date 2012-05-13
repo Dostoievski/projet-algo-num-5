@@ -54,29 +54,6 @@ def curve(f,n,t):
     return curve_values
 
 
-def airflow_model(f_int, f_ext):
-    """ Generates the paths followed by the air particles around the airfoil defined by f_int and f_ext """
-    t = np.arange(0.0, 1.0, 0.01)
-    lambdaTab = np.arange(0.0,1.0,0.1)  
-    nbLambda = len(lambdaTab)
-    
-    for i in range(nbLambda):
-        f_lambda_int = f_lambda(f_int, lambdaTab[i], min(iy))
-        f_lambda_values_int = itt.curve(f_lambda_int,len(t),t)
-        mp.plot(t,f_lambda_values_int,linewidth=1.0, color='#0000ff')
-        
-    for j in range(nbLambda):
-        f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
-        f_lambda_values_ext = itt.curve(f_lambda_ext,len(t),t)
-        mp.plot(t,f_lambda_values_ext,linewidth=1.0, color='#0000ff')
-
-    mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
-    mp.xlabel('x')
-    mp.ylabel('y')
-    mp.title('Laminar airflow of the fx63145')
-    mp.savefig("airflows.png")
-    mp.clf()
-
 def pressure_to_colour(P, Pbase, Pmax):
     """ Converts pressure to hexadecimal colour value """ 
     return ((P-Pbase)*10/Pmax)**3
@@ -125,7 +102,7 @@ def curves_pressure_representation(file_src, file_dest, integration_method, prec
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
     mp.xlabel('x')
     mp.ylabel('y')
-    mp.title('Map pressure of the fx63145 (The lighter corresponds to high pressure)')
+    mp.title('Map pressure of the fx63145 (the lighter colors correspond to higher pressures)')
     mp.savefig(file_dest)
     mp.clf()
 
@@ -159,7 +136,6 @@ print pressure_on_curve(Ps, length_ext_a)
 print "Calculation of pressure_int for f_lambda_b with lambda = 1.0"
 print pressure_on_curve(Ps, length_ext_b)
 
-airflow_model(int_interp_fun, ext_interp_fun)
 
 curves_pressure_representation("fx63145.dat", "pressure_curves_simpson.png", it.simpson, 0.1, 100)
 #curves_pressure_representation("fx63145.dat", "pressure_curves_rect_right.png", it.rectangle_method_right, 0.1, 100)
