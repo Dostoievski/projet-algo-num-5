@@ -1,5 +1,5 @@
 from laminar_airflow import *
 
-h = lambda(x):x**3
-
-airflow_model(h)
+print "Saving the result of the airflow model in airflow.png..."
+airflow_model("fx63145.dat")
+print "Done."

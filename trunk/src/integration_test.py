@@ -16,17 +16,20 @@ real_value = (b**6/6. - a**6/6.)
 
 n = 1000.
 
-print "theoretical value :", real_value
-print rectangle_method_left(f, a, b, n)
-print rectangle_method_right(f, a, b, n)
-print rectangle_method_middle(f, a, b, n)
-print trapez_method(f, a, b, n)
-print simpson(f, a, b, n)
 
+print "Theoretical Value :", real_value
+print "Value for n =", n, "left rectangle method :", rectangle_method_left(f, a, b, n)
+print "Value for n =", n, "right rectangle method :", rectangle_method_right(f, a, b, n)
+print "Value for n =", n, "middle rectangle method :", rectangle_method_middle(f, a, b, n)
+print "Value for n =", n, "trapezium method :", trapez_method(f, a, b, n)
+print "Value for n =", n, "simpson :", simpson(f, a, b, n)
+
+
+# These methods are very long to compute and not very precise, it may be an error in the algorithm
 eps = 1e-2
-#print "Méthode des rectangles (gauche) avec l'erreur :", rectangle_method_left_eps(f, a, b, eps)
-#print "Méthode des rectangles (droite) avec l'erreur :", rectangle_method_right_eps(f, a, b, eps)
-#print "Méthode des rectangles (milieu) avec l'erreur :", rectangle_method_middle_eps(f, a, b, eps)
+#print "Left rectangle method with error (epsilon =", eps,") :", rectangle_method_left_eps(f, a, b, eps)
+#print "Right rectangle method with error (epsilon =", eps,") :", rectangle_method_right_eps(f, a, b, eps)
+#print "Middle rectangle method with error (epsilon =", eps,") :", rectangle_method_middle_eps(f, a, b, eps)
 
 
 #------------------------------------------------#
@@ -67,7 +70,7 @@ def trace_integrals(f, a, b, nmax, l_fcts, l_labels):
     mp.legend(loc='best')
     mp.xlabel('n')
     mp.ylabel('integral value')
-    mp.title('Integration method trace')
+    mp.title('Integration methods comparison')
     mp.savefig("integration.png")
 
     mp.clf()
@@ -98,6 +101,7 @@ def trace_errors(f, a, b, nmax, l_fcts, l_labels, real_value):
     mp.legend(loc='lower left')
     mp.xscale('log')
     mp.yscale('log')
+    mp.title('Error depending on integration methods (logarithmic scale)')
     mp.savefig("log_errors_integration.png")
 
     mp.clf()

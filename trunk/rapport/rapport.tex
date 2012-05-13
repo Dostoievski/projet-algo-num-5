@@ -2,7 +2,7 @@
 
 \usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 \usepackage{fancyhdr}
-\lhead{\textsc{Numerical Algorithmic Projetc}}
+\lhead{\textsc{Numerical Algorithmic Project}}
 \rhead{\textsc{Interpolation and Integration Methods}}
 \renewcommand{\headrulewidth}{1px}
 \lfoot{ \textsc{ENSEIRB-MATMECA}}
@@ -51,7 +51,7 @@
     \fbox{\begin{tabular}{l}
         {~\hfill \bfseries \sffamily Group n°\groupe \hspace{3mm} Team n°\team \hfill~} \\[2mm] 
         Responsible : \responsible \\
-        Secratary   : \secretary \\
+        Secretary   : \secretary \\
         Programmers : \others
     \end{tabular}}
     \vskip 4mm ~
@@ -169,7 +169,7 @@ Several integration methods will be used and compared.
 Every method listed bellow follows the same steps to compute the integral value of a function on a interval and with a given number of intervals :
 
 \begin{itemize}
-\item the aproximated integral value on the first interval is computed.
+\item the approximated integral value on the first interval is computed.
 \item the integral on the next interval is computed and added this value to the previous
 \item when the integral on the last interval has been calculated, the process is stopped
 \end{itemize}
@@ -214,7 +214,7 @@ This integration method is a better alternatives to the previous method, even th
 
 \begin{equation}
 \label{int_trap}
-I(f,a,b,n) = I_{left\_rect} - \frac{h}{2}(f(a) - f(b)) \text{with} \quad h = \frac{b-a}{n}
+I(f,a,b,n) = I_{left\_rect} - \frac{h}{2}(f(a) - f(b)) \quad \text{with} \quad h = \frac{b-a}{n}
 \end{equation}
 
 Processing this way, $f$ is only evaluated once, instead of twice.
@@ -223,9 +223,9 @@ Processing this way, $f$ is only evaluated once, instead of twice.
 \subsection{Simpson Integration Method}
 The problem with the previous methods is that they just give an average value of the function and do not take the possible variations inside the interval into account.
 
-The Simpson method approximates the function by a polynom on each interval. This way, the approximation follows the variations of the curve.
+The Simpson method approximates the function by a polynomial on each interval. This way, the approximation follows the variations of the curve.
 
-Thanksfully, the real polynom has not to be calculated, and the formula given by the equation \ref{int_simpson} calculates directly the integral of the second degree polynom interpolating the curve.
+Thankfully, the real polynomial has not to be calculated, and the formula given by the equation \ref{int_simpson} calculates directly the integral of the second degree polynomial interpolating the curve.
 
 \begin{equation}
 \label{int_simpson}
@@ -258,21 +258,46 @@ On these graphs, the function chosen is representative of the global results we 
 
 In every case we saw, the Simpson method clearly seems to be the best.
 
-\section{Computing the pressure map}
-The airfoil length is needed to compute the pressure of the air around the airfoil.
-In order to compute the pressure, we have to model the air flow.
+\section{Computing the Pressure Map}
+The airfoil length is required to compute the pressure of the air around the airfoil.
+In order to compute this pressure, we have to model the airflow.
 
+\subsection{Modeling the Laminar Airflow}
+Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier.
+The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}.
 
-\subsection{Modeling the laminar airflow}
-Even if the real air flow around an airfoil is not laminar, this model have been choosen to make the computation easier.
-The laminar air flow can be modeled by using the formula below, each one of the curves obtained represent the path followed by an air particule.
-Given the formula resulted from of the interpolation of the points of the airfoil, each curve was computed from the extrados formula or from the intrados formula like this : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation.
-The algorithm consists on create a loop ''for`` for generating the number of lambda function wanted. This loop is easily formed : we calculate the lambda function from the spline cubic function and we plot this function.
+\begin{figure}
+
+\end{figure}
+
+Given the airfoil points interpolation function, each curve was computed for the extrados or the intrados with this formula : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation. Each curve corresponds to a value of $\lambda$.
 
 
 
 \subsection{Computing the pressure variation map}
-Then the pressure on the airfoil will depend of the length of each path. Indeed we assume that every air particule takes the same time to go from the beginning to the end of the airfoil, given the curved shape of the airfoil, the faster the particule will have to travel, the more dynamic pressure it will generate on the airfoil according to the Bernoulli law. 
-To build this graph, we inspired us from the laminar airflow algorithm. That is to say, we built the same curves but we added more lambda functions to reduce the gap between each curve and we colorize each one with a colour corresponding to a pressure value thanks to the pressure\_to\_colour function : to each pressure calculated from the length of a lambda function, we associate a colour (less or more) lighter. And here we have the feeling of a true colour gradient.
+The pressure around the airfoil depends on the length of the path followed by the air particles. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, the more curved is the path the faster the particle will have to travel, and the greater dynamic pressure will be.
+
+To build this graph, a lot of airflow paths are traced to reduce the gap between each curve, and each one is colorized with a colour corresponding to the pressure value on it with an arbitrary formula. The density of the curves and the gradient of color chosen provide a good representation of the pressure map (see figure \ref{pressure_map}).
+
+\begin{figure}[h]
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/airflows.png}
+    \label{airflow}
+    \caption{The airflow shape around the airfoil}
+  \end{minipage}
+  %%%%%%%%%%%
+  \hspace{0.1\textwidth}
+  %%%%%%%%%%%
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.4]{../src/pressure_curves_simpson.png}
+    \caption{Pressure map around the airfoil (the Simpson method was used)}
+    \label{pressure_map}
+  \end{minipage}
+\end{figure}
+
+\section{Conclusion}
+This project has been an opportunity to understand the implication of every module involved in a modelling program. Indeed the integral computation used here could seem to be a small part of this project, but seeing the convergence speed comparison results, we realized that it is one of the more important part in term of performance and precision. We also saw the necessity to have a smooth derivable interpolation of the airfoil to obtain good results, which was possible thanks to cubic splines.
+Moreover it still remains interesting to apply mathematical concepts to a very concrete purpose.
+
 
 \end{document}
