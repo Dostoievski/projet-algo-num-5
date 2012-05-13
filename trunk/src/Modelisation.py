@@ -77,6 +77,7 @@ def airflow_model(f_int, f_ext):
     mp.clf()
 
 def pressure_to_colour(P, Pbase, Pmax):
+    """ Converts pressure to hexadecimal colour value """ 
     return ((P-Pbase)*10/Pmax)**3
     
 
@@ -132,8 +133,8 @@ def curves_pressure_representation(file_src, file_dest, integration_method, prec
 # TESTS :                                        #
 #------------------------------------------------#
 
-print " \n ## With simpsons integrals ### \n"
-print " \n ########### EXTRADOS ######### \n "
+print " \n ### With simpsons integrals ### \n"
+print " \n ########### EXTRADOS ########## \n "
 
 f_lambda_ext_d_a = f_lambda_d(ext_interp_fun_d, 0.1)
 f_lambda_ext_d_b = f_lambda_d(ext_interp_fun_d, 1.0)
@@ -157,16 +158,9 @@ print pressure_on_curve(Ps, length_ext_a)
 print "Calculation of pressure_int for f_lambda_b with lambda = 1.0"
 print pressure_on_curve(Ps, length_ext_b)
 
-    
-#M = matrix_map_pressure(ext_interp_fun_d, 1, 1, 0.1)
-#print matrix_to_png(M, "Map_pressure.png")
-
 airflow_model(int_interp_fun, ext_interp_fun)
 
 curves_pressure_representation("fx63145.dat", "pressure_curves_simpson.png", it.simpson, 0.1, 100)
 #curves_pressure_representation("fx63145.dat", "pressure_curves_rect_right.png", it.rectangle_method_right, 0.1, 100)
-
-Mat = plot_pressures_around_airfoil_mat("fx63145.dat", 10.)
-matrix_to_png(Mat, "test_pressure.png")
 
 
