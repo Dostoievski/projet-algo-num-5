@@ -31,9 +31,3 @@ def airflow_model(f):
     mp.savefig("laminar_airflow.png")
 
     return 1
-
-
-
-h = lambda(x):x**3
-
-airflow_model(h)
