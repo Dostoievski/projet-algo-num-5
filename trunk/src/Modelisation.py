@@ -3,6 +3,7 @@ import scipy.integrate as sp
 import splines as spl
 import pylab as mp
 import integration as it
+import integration_test as itt
 
 (ex,ey,ix,iy) = spl.load_foil("fx63145.dat")
 
@@ -61,12 +62,12 @@ def airflow_model(f_int, f_ext):
     
     for i in range(nbLambda):
         f_lambda_int = f_lambda(f_int, lambdaTab[i], min(iy))
-        f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
+        f_lambda_values_int = itt.curve(f_lambda_int,len(t),t)
         mp.plot(t,f_lambda_values_int,linewidth=1.0, color='#0000ff')
         
     for j in range(nbLambda):
         f_lambda_ext = f_lambda(f_ext, lambdaTab[j], max(ey))
-        f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
+        f_lambda_values_ext = itt.curve(f_lambda_ext,len(t),t)
         mp.plot(t,f_lambda_values_ext,linewidth=1.0, color='#0000ff')
 
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
@@ -109,7 +110,7 @@ def curves_pressure_representation(file_src, file_dest, integration_method, prec
         length_int = length_of_curve(f_lambda_int_d, integration_method, min(ix), max(ix), n)
         pressure = pressure_on_curve(Ps, length_int)
         color = pressure_to_colour(pressure, Pbase, Pmax)
-        f_lambda_values_int = it.curve(f_lambda_int,len(t),t)
+        f_lambda_values_int = itt.curve(f_lambda_int,len(t),t)
         mp.plot(t,f_lambda_values_int,linewidth=5.0, color=(color, color**3,0))
         
     for l in reversed(lambdaTab):
@@ -118,7 +119,7 @@ def curves_pressure_representation(file_src, file_dest, integration_method, prec
         length_ext = length_of_curve(f_lambda_ext_d, integration_method, min(ex), max(ex), n)
         pressure = pressure_on_curve(Ps, length_ext)
         color = pressure_to_colour(pressure, Pbase, Pmax)
-        f_lambda_values_ext = it.curve(f_lambda_ext,len(t),t)
+        f_lambda_values_ext = itt.curve(f_lambda_ext,len(t),t)
         mp.plot(t,f_lambda_values_ext,linewidth=5.0, color=(color,color**3,0))
 
     mp.axis([min(ex), max(max(ex),max(ix)), 3*min(iy), 3*max(ey)])
@@ -151,7 +152,7 @@ f_lambda_ext_d = f_lambda_d(ext_interp_fun_d, l)
 length_ext_b = length_of_curve(f_lambda_ext_d, it.simpson, min(ex), max(ex), 100)
 print length_ext_b
 
-Ps = 0
+Ps = 5
 print "\nCalculation of pressure_int for f_lambda_a with lambda = 0.1"
 print pressure_on_curve(Ps, length_ext_a)
 
