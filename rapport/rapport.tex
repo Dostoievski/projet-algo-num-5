@@ -50,7 +50,7 @@
     \hfill 
     \fbox{\begin{tabular}{l}
         {~\hfill \bfseries \sffamily Group n°\groupe \hspace{3mm} Team n°\team \hfill~} \\[2mm] 
-        Responsible : \responsible \\
+        Manager     : \responsible \\
         Secretary   : \secretary \\
         Programmers : \others
     \end{tabular}}
@@ -131,7 +131,7 @@ The cubic\_splines\_interpolation\_precalc function pre computed the values of t
 The final complexity of this process was : $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It was linear and not constant, because the right value of $i$ had to be found so that $x_i < x \leq  x_{i+1}$.
 
 \subsection{Computing the Derivative}
-For the second part of this project, a cubic spline derivative function had to be computed. The process won't be detailed here because it was mainly the same as the computation of the cubic spline function. The only thing that changed was when $A$, $B$, $C$ and $D$ were computed, the derivative of these coefficients with respect to $x$ were used.
+For the second part of this project, a cubic spline derivative function had to be computed. The process will not be detailed here because it was mainly the same as the computation of the cubic spline function. The only thing that changed was when $A$, $B$, $C$ and $D$ were computed, the derivative of these coefficients with respect to $x$ were used.
 
 To sum up, all that had to be done was to compute the formal derivative of $A$, and all the other coefficient were easily calculated by using it. This algorithm complexity was exactly the same as the previous one:  $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it.
 
@@ -174,17 +174,17 @@ Every method listed bellow follows the same steps to compute the integral value 
 \item when the integral on the last interval had been calculated, the process was stopped.
 \end{itemize}
 
-The only thing that changed is the method used to compute the integral value, and with it the convergence speed.
+The only thing that changed was the method used to compute the integral value, and with it the convergence speed.
 
 \subsection{Left Rectangle Integration Method}
-The principle is the following:
+The principle was the following:
 
 \begin{itemize}
-\item the value of $f(x)$ is computed with x the left bound of the interval
-\item the surface of the rectangle having $f(x)$  as height and the interval's size as width is computed
+\item the value of $f(x)$ was computed ($x$ was the left bound of the interval),
+\item the surface of the rectangle having $f(x)$ as height and the interval's size as width was computed.
 \end{itemize}
 
-Finally, the used formula is described by the equation \ref{int_left_rect}, for a function $f$, into the interval $[a,b]$ subdivided in $n$ intervals.
+Finally, the formula used was described by the equation \ref{int_left_rect}, for a function $f$, into the interval $[a,b]$ subdivided in $n$ intervals.
 
 \begin{equation}
 \label{int_left_rect}
@@ -192,7 +192,7 @@ I(f,a,b,n) = h * \sum_{k = 0}^{N-2} f(a+kh) \quad \text{with} \quad h = \frac{b-
 \end{equation}
 
 \subsection{Right Rectangle Integration Method}
-Same thing than the left rectangle method, except that the $f(x)$ value is the right bound of the interval. The formula is the equation \ref{int_right_rect}.
+This method is very similar to the left rectangle one, except that the $f(x)$ value was the right bound of the interval. The formula is given by the equation \ref{int_right_rect}.
 
 \begin{equation}
 \label{int_right_rect}
@@ -201,7 +201,7 @@ I(f,a,b,n) = h * \sum_{k = 1}^{N-1} f(a+kh) \quad \text{with} \quad h = \frac{b-
 
 
 \subsection{Middle Rectangle Integration Method}
-Same thing than Left or Right rectangle method except that the $f(x)$ used is the middle of the interval. See equation \ref{int_mid}.
+This method is very similar to the left and right rectangle ones except that the $f(x)$ used was the middle of the interval. See equation \ref{int_mid}.
 
 \begin{equation}
 \label{int_mid}
@@ -210,22 +210,22 @@ I(f,a,b,n) = h * \sum_{k = 0}^{N-2} f(a+kh+\frac{h}{2}) \quad \text{with} \quad 
 
 
 \subsection{Trapezium Integration Method}
-This integration method is a better alternatives to the previous method, even though the only difference is that both images of the left and right bounds are computed to construct a trapezium and calculate its surface. A good thing to notice is that we can deduce this method from the previous ones using the equation \ref{int_trap}.
+This integration method was a better alternative to the previous method, even though the only difference was that both images of the left and right bounds were computed to construct a trapezium and to calculate its surface. A good thing to notice is that this method can be deduced from the previous ones using equation \ref{int_trap}.
 
 \begin{equation}
 \label{int_trap}
 I(f,a,b,n) = I_{left\_rect} - \frac{h}{2}(f(a) - f(b)) \quad \text{with} \quad h = \frac{b-a}{n}
 \end{equation}
 
-Processing this way, $f$ is only evaluated once, instead of twice.
+Processing this way, $f$ was only evaluated once, instead of twice.
 
 
 \subsection{Simpson Integration Method}
-The problem with the previous methods is that they just give an average value of the function and do not take the possible variations inside the interval into account.
+The problem with the previous methods was that they just gave an average value of the function and did not take the possible variations inside the interval into account.
 
 The Simpson method approximates the function by a polynomial on each interval. This way, the approximation follows the variations of the curve.
 
-Thankfully, the real polynomial has not to be calculated, and the formula given by the equation \ref{int_simpson} calculates directly the integral of the second degree polynomial interpolating the curve.
+Thankfully, the real polynomial did not have to be calculated, and the formula given by equation \ref{int_simpson} directly calculates the integral of the second degree polynomial interpolating the curve.
 
 \begin{equation}
 \label{int_simpson}
@@ -250,32 +250,32 @@ I(f,a,b,n) = h * \sum_{k = 1}^{N-1} \frac{1/6} f(a+(k-1)h) + \frac{2/3} f(a+(k-0
   \end{minipage}
 \end{figure}
 
-As we can see on figure \ref{error_integration} and even more on figure \ref{log_error_integration} is that the Simpson method converges faster than the other ones.
+As can be seen in figure \ref{error_integration} and even more in figure \ref{log_error_integration} the Simpson method converges faster than the other ones.
 
-With the logarithmic errors, we can determine more precisely, the convergence speed of the various methods. Indeed, the slope of the straight line provides the convergence speed, because powers become multiplicative factors in logarithmic scales. What can be seen is that the left and right rectangle method converge with a $\mathcal{O}(n)$ speed ($n$ being the number of iterations). The middle rectangle and trapezium method converge with a $\mathcal{O}(n^2)$ speed, and the Simpson method with a $\mathcal{O}(n^3)$ speed.
+With the logarithmic errors, the convergence speed of the various methods can be determined more precisely. In fact, the slope of the straight line provides the convergence speed, because powers become multiplicative factors in logarithmic scales. What can be seen is that the left and right rectangle method converge with a $\mathcal{O}(n)$ speed ($n$ being the number of iterations). The middle rectangle and trapezium method converge with a $\mathcal{O}(n^2)$ speed, and the Simpson method with a $\mathcal{O}(n^3)$ speed. % Ici, ce sont des véritées générales, pas des étapes du process
 
-On these graphs, the function chosen is representative of the global results we found, but for the function $f(x) = \sqrt{1-x^2}$ on the interval $[-1,1]$ all the method converge with the same speed. We think that it's linked with the fact that this function is not derivable on $-1$ and $1$, but we had not the time to develop it.
+On these graphs, the function chosen was representative of the global results found, but for the function $f(x) = \sqrt{1-x^2}$ on the interval $[-1,1]$ all the methods converge with the same speed. We think that it's linked to the fact that this function is not derivable on $-1$ and $1$, but we did not have the time to develop it.
 
-In every case we saw, the Simpson method clearly seems to be the best.
+In every case seen, the Simpson method clearly seemed to be the best.
 
 The complexity of each method is $\mathcal{O}(n)$ in terms of $f$ calls ($n$ being the number of intervals).
 
 \section{Computing the Pressure Map}
 The airfoil length is required to compute the pressure of the air around the airfoil.
-In order to compute this pressure, we have to model the airflow.
+In order to compute this pressure, the airflow had to be modeled.
 
 \subsection{Modeling the Laminar Airflow}
-Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier.
-The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}).
+Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier. % vérité générale
+The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represents the path followed by an air particle (see figure \ref{airflow}).
 
-Given the airfoil points interpolation function, each curve was computed for the extrados or the intrados with this formula : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation. Each curve corresponds to a value of $\lambda$.
+Given the airfoil points interpolation function, each curve was computed for the extrados or the intrados with this formula: \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f was the result of the interpolation. Each curve corresponds to a value of $\lambda$.
 
 
 
 \subsection{Computing the Pressure Variation Map}
-The pressure around the airfoil depends on the length of the path followed by the air particles. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, the more curved is the path the faster the particle will have to travel, and the greater dynamic pressure will be.
+The pressure around the airfoil depends on the length of the path followed by the air particles. It is assumed that every air particle takes the same time to go from the beginning to the end of the airfoil, the more curved the path is, the faster the particle will have to travel, and the greater the dynamic pressure will be.
 
-To build this graph, a lot of airflow paths are traced to reduce the gap between each curve, and each one is colorized with a colour corresponding to the pressure value on it with an arbitrary formula. The density of the curves and the gradient of color chosen provide a good representation of the pressure map (see figure \ref{pressure_map}).
+To plot this graph, a lot of airflow paths were traced to reduce the gap between each curve, and each one was colored with a color corresponding to the pressure value on it with an arbitrary formula. The density of the curves and the gradient of color chosen provide a good representation of the pressure map (see figure \ref{pressure_map}).
 
 \begin{figure}[h]
   \begin{minipage}{0.45\textwidth}
@@ -294,8 +294,8 @@ To build this graph, a lot of airflow paths are traced to reduce the gap between
 \end{figure}
 
 \section{Conclusion}
-This project has been an opportunity to understand the implication of every module involved in a modelling program. Indeed the integral computation used here could seem to be a small part of this project, but seeing the convergence speed comparison results, we realized that it is one of the more important part in term of performance and precision. We also saw the necessity to have a smooth derivable interpolation of the airfoil to obtain good results, which was possible thanks to cubic splines.
-Moreover it still remains interesting to apply mathematical concepts to a very concrete purpose.
+This project was an opportunity to understand the influence of every module involved in a modelling program. In fact, the integral computation used here may seem to be a small part of this project, but seeing the convergence speed comparison results, we realized that it is one of the most important parts in term of performance and precision. We also saw the necessity to have a smooth derivable interpolation of the airfoil to obtain good results, which was possible thanks to cubic splines.
+Moreover, it's always interesting to apply mathematical concepts to a very concrete purpose.
 
 
 \end{document}
