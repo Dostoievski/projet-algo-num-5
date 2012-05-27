@@ -274,15 +274,11 @@ In order to compute this pressure, we have to model the airflow.
 Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier.
 The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}).
 
-\begin{figure}
-
-\end{figure}
-
 Given the airfoil points interpolation function, each curve was computed for the extrados or the intrados with this formula : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation. Each curve corresponds to a value of $\lambda$.
 
 
 
-\subsection{Computing the pressure variation map}
+\subsection{Computing the Pressure Variation Map}
 The pressure around the airfoil depends on the length of the path followed by the air particles. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, the more curved is the path the faster the particle will have to travel, and the greater dynamic pressure will be.
 
 To build this graph, a lot of airflow paths are traced to reduce the gap between each curve, and each one is colorized with a colour corresponding to the pressure value on it with an arbitrary formula. The density of the curves and the gradient of color chosen provide a good representation of the pressure map (see figure \ref{pressure_map}).
