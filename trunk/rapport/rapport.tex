@@ -56,7 +56,7 @@
     \end{tabular}}
     \vskip 4mm ~
 
-    \parbox{\textwidth}{\small \textit{Abstract :} the goal of this project was to implement a basic model to represent the airflow around an airfoil. With that airflow model, it will be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air). This is to be done in two steps : refining the airfoil into a sufficiently smooth curve, and then computing the pressure map using an integration method.
+    \parbox{\textwidth}{\small \textit{Abstract :} the goal of this project was to compute a basic model to represent the airflow around an airfoil. With that airflow model, it's be possible to obtain the pressure map of the air above and under the wing, in order to approximate the wing's lift (it's ability to keep the plane in the air). This is to be done in two steps : refining the airfoil into a sufficiently smooth curve, and then computing the pressure map using an integration method.
 %      \begin{enumerate}
 %      \item refining the airfoil into a sufficiently smooth curve;
 %      \item computing the pressure map using an integration method.
@@ -71,20 +71,20 @@ The only airfoil representation available so far is a .dat file describing a clo
 In order to be able to work on it using the python programming language, the .dat file information\footnote{The point cloud positions} has to be converted into a smooth curve. To obtain that curve, the points describing the upper part (named extrados) and the lower part (named intrados) of the airfoil will be interpolated using cubic splines.
 
 \subsection{How to Interpolate a Cloud of Points with Cubic Splines}
-To do this interpolation the best way possible, the method and formulas given by the \textit{Numerical Recipes in C} were used. We assume that a cloud of points $(x_i, y_i), \: i \in [0,N-1]$ is provided. There are two main parts of pre-calculus to be able to get the interpolation on any $x \in [x_0, x_{N-1}]$ point, given by the equation \ref{interp_form_1}:
+To do this interpolation the best way possible, the method and formulas given by the \textit{Numerical Recipes in C} were used. We assume that a cloud of points $(x_i, y_i), \: i \in [0,N-1]$ is provided. There are two main parts of pre-calculus to get the interpolation on any $x \in [x_0, x_{N-1}]$ point, given by the equation \ref{interp_form_1}:
 
 \begin{equation}
 \label{interp_form_1}
   interp(x)=A(x)*y_i + B(x)*y_{i+1} + C(x)*y''_i + D(x)*y''_{i+1}
 \end{equation}
 
-The first thing to carry out is to find the second derivatives of the curve at the points corresponding to $x_i, \: i \in [0,N-1]$. It can be done by solving a equation system. Indeed, all the $y_i, \: i \in [1,N-2]$ are linked by the following equation :
+The first task to carry out is to find the second derivatives of the curve at the points corresponding to $x_i, \: i \in [0,N-1]$. It can be done by solving an equation system. Actually, all the $y_i, \: i \in [1,N-2]$ are linked by the following equation :
 
 \begin{equation}
  \frac{x_i - x_{i-1}}{6}*y''_{i-1} + \frac{x_{i+1} - x_{i-1}}{3}*y''_{i} + \frac{x_{i+1} - x_i}{6}*y''_{i+1} = \frac{y_{i+1} - y_i}{x_{i+1} - x_i} - \frac{y_{i} - y_{i-1}}{x_{i} - x_{i-1}}
 \end{equation}
 
-There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose to set them to $0$. Once the values are set up, the system is solved. The whole process is summed up by algorithm \ref{interp_precalc}.
+There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose to set them at $0$. Once the values were set up, the system was solved. The whole process is summed up by algorithm \ref{interp_precalc}.
 
 \begin{algorithm}
   \caption{Pre-calculus of the second derivatives for the cubic spline interpolation}
@@ -107,12 +107,12 @@ There are multiple options for the values given to $y_0$ and $y_{N-1}$. We chose
 \end{algorithm}
 
 
-Once this system is solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ are computed, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} is calculated.
+Once this system was solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ were computed, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} was calculated.
 
-The result is right, but one problem remains : the $interp(x)$ evaluation complexity is $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation has to be solved at each evaluation.
+The result was right, but one problem remained : the $interp(x)$ evaluation complexity was $\mathcal{O}(N^3)$ ($N$ being the number of points), because the system of equation had to be solved at each evaluation.
 
 \subsection{Optimisation}
-Now that everything is computed to calculate $interp(x)$, we notice that without optimisation, the equation system to find all the second derivatives will have to be solved every time $interp(x)$ is evaluated, and a lot of time will be lost. To avoid this problem, we chose to use functional programming, as shown in algorithm \ref{interp_calc}.
+Once everything was computed to calculate $interp(x)$, it was noticed that without optimisation, the equation system to find all the second derivatives had to be solved every time $interp(x)$ was evaluated, and a lot of time was lost. To avoid this problem, it was chosen to use functional programming, as shown in algorithm \ref{interp_calc}.
 
 \begin{algorithm}
   \caption{Computation of the cubic spline interpolation function}
@@ -126,17 +126,17 @@ Now that everything is computed to calculate $interp(x)$, we notice that without
   \end{algorithmic}
 \end{algorithm}
 
-The cubic\_splines\_interpolation\_precalc function pre computes the values of the second derivatives, and the cubic\_splines\_interpolation\_calc function that is returned only calculates the $A$, $B$, $C$ and $D$ factors fitting to the $x$ given in parameter, in order to return the interpolation value in $x$. The function returned memorizes the values of the second derivatives.
+The cubic\_splines\_interpolation\_precalc function pre computed the values of the second derivatives, and the cubic\_splines\_interpolation\_calc function that was returned only calculated the $A$, $B$, $C$ and $D$ factors corresponding to the $x$ given in parameter, in order to return the interpolation value in $x$. The function returned memorized the values of the second derivatives.
 
-The final complexity of this process is: $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It is linear and not constant, because we have to find $i$ so that $x_i < x \leq  x_{i+1}$.
+The final complexity of this process was : $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it. It was linear and not constant, because the right value of $i$ had to be found so that $x_i < x \leq  x_{i+1}$.
 
 \subsection{Computing the Derivative}
-For the second part of this project, a cubic spline derivative function had to be computed. The process won't be detailed here because it is mainly the same as the computation of the cubic spline function. The only thing that changes is when $A$, $B$, $C$ and $D$ are computed, we use the derivative of these coefficient with respect to $x$.
+For the second part of this project, a cubic spline derivative function had to be computed. The process won't be detailed here because it was mainly the same as the computation of the cubic spline function. The only thing that changed was when $A$, $B$, $C$ and $D$ were computed, the derivative of these coefficients with respect to $x$ were used.
 
-To sum up, all that have to be done is to compute the formal derivative of $A$, and all the other coefficient will be easily calculated by using it. This algorithm complexity is exactly the same as the previous one:  $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it
+To sum up, all that had to be done was to compute the formal derivative of $A$, and all the other coefficient were easily calculated by using it. This algorithm complexity was exactly the same as the previous one:  $\mathcal{O}(N^3)$ to obtain the interpolating function, and  $\mathcal{O}(N)$ to evaluate it.
 
 \subsection{Results}
-Figure \ref{res_interp_1} shows the interpolation of the airfoil we used with the original points provided. Figure \ref{res_interp_2} shows the airfoil interpolation and its derivative.
+Figure \ref{res_interp_1} shows the interpolation of the airfoil used with the original points provided. Figure \ref{res_interp_2} shows the airfoil interpolation and its derivative.
 
 \begin{figure}[h]
   \begin{minipage}{0.45\textwidth}
@@ -156,25 +156,25 @@ Figure \ref{res_interp_1} shows the interpolation of the airfoil we used with th
 
 
 \section{Computing the Length of Plane Curves with Various Integration Methods}
-Once a curve representing the airfoil is obtained, finding a way to compute the airfoil's length is the next step in the pressure map creation.
-To do that, the equation \ref{int_gen_eq} will have to be computed with our values.
+Once a curve representing the airfoil was obtained, finding a way to compute the airfoil's length was the next step in the pressure map creation.
+To do that, equation \ref{int_gen_eq} had to be computed with our values.
 
 \begin{equation}
   \label{int_gen_eq}
   L([0;T]) = \int_{0}^{T} \sqrt{1 + f'(x)^2}dx
 \end{equation}
 
-Several integration methods will be used and compared.
+Several integration methods were used and compared.
 
-Every method listed bellow follows the same steps to compute the integral value of a function on a interval and with a given number of intervals :
+Every method listed bellow follows the same steps to compute the integral value of a function on an interval and with a given number of intervals :
 
 \begin{itemize}
-\item the approximated integral value on the first interval is computed.
-\item the integral on the next interval is computed and added this value to the previous
-\item when the integral on the last interval has been calculated, the process is stopped
+\item the approximated integral value on the first interval was computed.
+\item the integral on the next interval was computed and added to the previous,
+\item when the integral on the last interval had been calculated, the process was stopped.
 \end{itemize}
 
-The only thing that will change is the method used to compute the integral value, therefore the convergence speed.
+The only thing that changed is the method used to compute the integral value, and with it the convergence speed.
 
 \subsection{Left Rectangle Integration Method}
 The principle is the following:
@@ -268,15 +268,11 @@ In order to compute this pressure, we have to model the airflow.
 Even if the real airflow around an airfoil is not laminar, this model have been chosen to make the computation easier.
 The laminar airflow around the airfoil can be modeled by using the formula below, each curve obtained represent the path followed by an air particle (see figure \ref{airflow}).
 
-\begin{figure}
-
-\end{figure}
-
 Given the airfoil points interpolation function, each curve was computed for the extrados or the intrados with this formula : \[y = (1-\lambda)f(x)+\lambda\times3h\:\forall\lambda\in[0;1]\] where f is the result of the interpolation. Each curve corresponds to a value of $\lambda$.
 
 
 
-\subsection{Computing the pressure variation map}
+\subsection{Computing the Pressure Variation Map}
 The pressure around the airfoil depends on the length of the path followed by the air particles. Indeed we assume that every air particle takes the same time to go from the beginning to the end of the airfoil, the more curved is the path the faster the particle will have to travel, and the greater dynamic pressure will be.
 
 To build this graph, a lot of airflow paths are traced to reduce the gap between each curve, and each one is colorized with a colour corresponding to the pressure value on it with an arbitrary formula. The density of the curves and the gradient of color chosen provide a good representation of the pressure map (see figure \ref{pressure_map}).
