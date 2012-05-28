@@ -109,7 +109,7 @@ There are multiple options for the values given to $y_0$ and $y_{N-1}$. We have 
 
 Once this system was solved, the values of $A(x)$, $B(x)$, $C(x)$ and $S(x)$ were computed, with the formulas given by the \textit{Numerical Recipes in C}, and $interp(x)$\footnote{The value of the cubic splines interpolation of the cloud of points in $x$.} was calculated.
 
-The result was right, but one problem remained : the $interp(x)$ evaluation complexity was $\mathcal{O}(N^3)$ ($N$ being the number of points), because the euqtion system had to be solved at each evaluation.
+The result was right, but one problem remained : the $interp(x)$ evaluation complexity was $\mathcal{O}(N^3)$ ($N$ being the number of points), because the equation system had to be solved at each evaluation.
 
 \subsection{Optimisation}
 Once everything was computed to calculate $interp(x)$, it was noticed that without optimisation, the equation system to find all the second derivatives had to be solved every time $interp(x)$ was evaluated, and a lot of time was lost. To avoid this problem, it was chosen to use functional programming, as shown in algorithm \ref{interp_calc}.
